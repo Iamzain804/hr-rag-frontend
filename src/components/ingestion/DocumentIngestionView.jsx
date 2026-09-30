@@ -196,295 +196,257 @@ Standard probation period for all new hires is 90 days. During probation, either
         </div>
       </div>
 
-      {/* Main Ingestion Panel Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left: Upload / Ingestion Form (7 cols) */}
-        <div className="lg:col-span-7 space-y-4">
-          <div className="p-6 border border-border bg-surface rounded-sm space-y-5 shadow-xs">
-            {/* Mode Switcher */}
-            <div className="flex items-center border-b border-border">
-              <button
-                type="button"
-                onClick={() => setActiveTab("file")}
-                className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
-                  activeTab === "file"
-                    ? "border-cherry dark:border-lime text-text-primary"
-                    : "border-transparent text-text-secondary hover:text-text-primary"
-                }`}
-              >
-                <UploadCloud size={16} />
-                <span>Upload PDF / Text File</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("text")}
-                className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
-                  activeTab === "text"
-                    ? "border-cherry dark:border-lime text-text-primary"
-                    : "border-transparent text-text-secondary hover:text-text-primary"
-                }`}
-              >
-                <Type size={16} />
-                <span>Paste Raw Text / Policy</span>
-              </button>
+      {/* Real-time Ingestion Result Card */}
+      {lastResult && (
+        <div className="p-5 border border-emerald-500/50 bg-emerald-500/10 rounded-sm space-y-2 animate-scaleIn">
+          <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider">
+            <CheckCircle2 size={16} />
+            <span>Document Ingested Successfully</span>
+          </div>
+          <div className="space-y-1 text-xs text-text-primary">
+            <div className="font-bold text-sm">{lastResult.source_document}</div>
+            <div className="text-text-secondary text-[11px] font-mono">
+              Chunks Created: <span className="font-bold text-text-primary">{lastResult.chunks_created}</span> &bull; Status: {lastResult.status}
             </div>
-
-            {/* Error Banner */}
-            {errorMsg && (
-              <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2">
-                <AlertCircle size={16} />
-                <span>{errorMsg}</span>
+            {lastResult.content_hash && (
+              <div className="text-[10px] font-mono text-text-secondary truncate mt-1">
+                Hash: {lastResult.content_hash}
               </div>
             )}
-
-            <form onSubmit={handleIngest} className="space-y-4">
-              {/* Document Title */}
-              <div>
-                <label className="block text-xs font-bold text-text-primary mb-1">
-                  Document Title <span className="text-vibrantRed">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. Employee Handbook 2026, Leave Policy, IT Allowance"
-                  className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime font-sans"
-                />
-              </div>
-
-              {/* Mode A: File Upload Dropzone */}
-              {activeTab === "file" && (
-                <div>
-                  <label className="block text-xs font-bold text-text-primary mb-1">
-                    Select Document (.pdf, .txt, .md) <span className="text-vibrantRed">*</span>
-                  </label>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".pdf,.txt,.md"
-                    onChange={handleFileSelect}
-                    className="hidden"
-                  />
-                  <div
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={handleFileDrop}
-                    onClick={() => fileInputRef.current?.click()}
-                    className={`border-2 border-dashed rounded-sm p-6 text-center cursor-pointer transition-all ${
-                      selectedFile
-                        ? "border-cherry dark:border-lime bg-bg"
-                        : "border-border hover:border-cherry/50 dark:hover:border-lime/50 bg-input-bg hover:bg-surface-hover"
-                    }`}
-                  >
-                    {selectedFile ? (
-                      <div className="space-y-2">
-                        <FileCheck size={32} className="mx-auto text-cherry dark:text-lime animate-bounce" />
-                        <div className="font-bold text-xs text-text-primary">{selectedFile.name}</div>
-                        <div className="text-[11px] text-text-secondary">
-                          {(selectedFile.size / 1024).toFixed(1)} KB &bull; Click or drop another file to replace
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <UploadCloud size={32} className="mx-auto text-text-secondary/60" />
-                        <div className="text-xs font-semibold text-text-primary">
-                          Click to browse or drag & drop document
-                        </div>
-                        <div className="text-[11px] text-text-secondary">
-                          Supports PDF, Plain Text (.txt), and Markdown (.md)
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Mode B: Raw Text Input */}
-              {activeTab === "text" && (
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-bold text-text-primary">
-                      Policy Document Content <span className="text-vibrantRed">*</span>
-                    </label>
-                    <span className="text-[10px] font-mono text-text-secondary">
-                      {rawText.length} characters
-                    </span>
-                  </div>
-                  <textarea
-                    rows={8}
-                    required
-                    value={rawText}
-                    onChange={(e) => setRawText(e.target.value)}
-                    placeholder="Paste full text of policy, clauses, handbooks, or SOPs here..."
-                    className="w-full p-3 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime font-mono leading-relaxed"
-                  />
-                </div>
-              )}
-
-              {/* Scope & Access Control Tagging */}
-              <div className="pt-2 border-t border-border space-y-3">
-                <label className="block text-xs font-bold text-text-primary">
-                  Document Scope & Access Permissions
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setScopeType("company-wide")}
-                    className={`p-2.5 border rounded-sm text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
-                      scopeType === "company-wide"
-                        ? "border-cherry dark:border-lime bg-bg text-text-primary font-bold shadow-xs"
-                        : "border-border bg-input-bg text-text-secondary hover:text-text-primary"
-                    }`}
-                  >
-                    <Globe size={14} className={scopeType === "company-wide" ? "text-cherry dark:text-lime" : ""} />
-                    <span>Company-Wide</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setScopeType("branch")}
-                    className={`p-2.5 border rounded-sm text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
-                      scopeType === "branch"
-                        ? "border-cherry dark:border-lime bg-bg text-text-primary font-bold shadow-xs"
-                        : "border-border bg-input-bg text-text-secondary hover:text-text-primary"
-                    }`}
-                  >
-                    <Building2 size={14} className={scopeType === "branch" ? "text-cherry dark:text-lime" : ""} />
-                    <span>Specific Branch</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setScopeType("department")}
-                    className={`p-2.5 border rounded-sm text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
-                      scopeType === "department"
-                        ? "border-cherry dark:border-lime bg-bg text-text-primary font-bold shadow-xs"
-                        : "border-border bg-input-bg text-text-secondary hover:text-text-primary"
-                    }`}
-                  >
-                    <FolderTree size={14} className={scopeType === "department" ? "text-cherry dark:text-lime" : ""} />
-                    <span>Specific Dept</span>
-                  </button>
-                </div>
-
-                {/* Branch selector if specific branch selected */}
-                {scopeType === "branch" && (
-                  <div className="pt-2 animate-fadeIn">
-                    <label className="block text-xs font-semibold text-text-secondary mb-1">
-                      Select Target Branch:
-                    </label>
-                    <select
-                      value={selectedBranchId}
-                      onChange={(e) => setSelectedBranchId(e.target.value)}
-                      className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
-                    >
-                      {branches.map((b) => (
-                        <option key={b.id} value={b.id}>
-                          {b.name} ({b.location})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {/* Department selector if specific department selected */}
-                {scopeType === "department" && (
-                  <div className="pt-2 animate-fadeIn">
-                    <label className="block text-xs font-semibold text-text-secondary mb-1">
-                      Select Target Department:
-                    </label>
-                    <select
-                      value={selectedDeptId}
-                      onChange={(e) => setSelectedDeptId(e.target.value)}
-                      className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
-                    >
-                      {departments.map((d) => (
-                        <option key={d.id} value={d.id}>
-                          {d.name} (Dept #{d.id})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-              </div>
-
-              {/* Submit CTA */}
-              <div className="pt-3 border-t border-border flex justify-end">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full sm:w-auto px-6 py-2.5 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all shadow-sm disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-btn-text border-t-transparent rounded-full animate-spin" />
-                      <span>Embedding into ChromaDB...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Layers size={16} />
-                      <span>Ingest & Generate Embeddings</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
           </div>
         </div>
+      )}
 
-        {/* Right: Ingestion Stats & Pipeline Metadata (5 cols) */}
-        <div className="lg:col-span-5 space-y-4">
-          {/* Real-time Ingestion Result Card */}
-          {lastResult && (
-            <div className="p-5 border border-emerald-500/50 bg-emerald-500/10 rounded-sm space-y-3 animate-scaleIn">
-              <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider">
-                <CheckCircle2 size={16} />
-                <span>Document Ingested Successfully</span>
-              </div>
-              <div className="space-y-1 text-xs text-text-primary">
-                <div className="font-bold text-sm">{lastResult.source_document}</div>
-                <div className="text-text-secondary text-[11px] font-mono">
-                  Chunks Created: <span className="font-bold text-text-primary">{lastResult.chunks_created}</span> &bull; Status: {lastResult.status}
-                </div>
-                {lastResult.content_hash && (
-                  <div className="text-[10px] font-mono text-text-secondary truncate mt-1">
-                    Hash: {lastResult.content_hash}
+      {/* Main Ingestion Panel Form */}
+      <div className="p-6 border border-border bg-surface rounded-sm space-y-5 shadow-xs">
+        {/* Mode Switcher */}
+        <div className="flex items-center border-b border-border">
+          <button
+            type="button"
+            onClick={() => setActiveTab("file")}
+            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
+              activeTab === "file"
+                ? "border-cherry dark:border-lime text-text-primary"
+                : "border-transparent text-text-secondary hover:text-text-primary"
+            }`}
+          >
+            <UploadCloud size={16} />
+            <span>Upload PDF / Text File</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("text")}
+            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
+              activeTab === "text"
+                ? "border-cherry dark:border-lime text-text-primary"
+                : "border-transparent text-text-secondary hover:text-text-primary"
+            }`}
+          >
+            <Type size={16} />
+            <span>Paste Raw Text / Policy</span>
+          </button>
+        </div>
+
+        {/* Error Banner */}
+        {errorMsg && (
+          <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2">
+            <AlertCircle size={16} />
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleIngest} className="space-y-4">
+          {/* Document Title */}
+          <div>
+            <label className="block text-xs font-bold text-text-primary mb-1">
+              Document Title <span className="text-vibrantRed">*</span>
+            </label>
+            <input
+              type="text"
+              required
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g. Employee Handbook 2026, Leave Policy, IT Allowance"
+              className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime font-sans"
+            />
+          </div>
+
+          {/* Mode A: File Upload Dropzone */}
+          {activeTab === "file" && (
+            <div>
+              <label className="block text-xs font-bold text-text-primary mb-1">
+                Select Document (.pdf, .txt, .md) <span className="text-vibrantRed">*</span>
+              </label>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,.txt,.md"
+                onChange={handleFileSelect}
+                className="hidden"
+              />
+              <div
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={handleFileDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className={`border-2 border-dashed rounded-sm p-8 text-center cursor-pointer transition-all ${
+                  selectedFile
+                    ? "border-cherry dark:border-lime bg-bg"
+                    : "border-border hover:border-cherry/50 dark:hover:border-lime/50 bg-input-bg hover:bg-surface-hover"
+                }`}
+              >
+                {selectedFile ? (
+                  <div className="space-y-2">
+                    <FileCheck size={36} className="mx-auto text-cherry dark:text-lime animate-bounce" />
+                    <div className="font-bold text-sm text-text-primary">{selectedFile.name}</div>
+                    <div className="text-xs text-text-secondary">
+                      {(selectedFile.size / 1024).toFixed(1)} KB &bull; Click or drop another file to replace
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <UploadCloud size={36} className="mx-auto text-text-secondary/60" />
+                    <div className="text-sm font-semibold text-text-primary">
+                      Click to browse or drag & drop document
+                    </div>
+                    <div className="text-xs text-text-secondary">
+                      Supports PDF, Plain Text (.txt), and Markdown (.md)
+                    </div>
                   </div>
                 )}
               </div>
             </div>
           )}
 
-          {/* Microservice Architecture Summary Card */}
-          <div className="p-5 border border-border bg-surface rounded-sm space-y-3">
-            <h3 className="font-bold text-xs uppercase tracking-wider text-text-primary flex items-center gap-2">
-              <Layers size={15} className="text-cherry dark:text-lime" />
-              Ingestion Architecture
-            </h3>
-            <div className="space-y-2 text-xs text-text-secondary">
-              <div className="flex items-center justify-between border-b border-border/50 pb-1.5">
-                <span>Vector Engine:</span>
-                <span className="font-mono font-bold text-text-primary">ChromaDB (Embedded)</span>
+          {/* Mode B: Raw Text Input */}
+          {activeTab === "text" && (
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-bold text-text-primary">
+                  Policy Document Content <span className="text-vibrantRed">*</span>
+                </label>
+                <span className="text-[10px] font-mono text-text-secondary">
+                  {rawText.length} characters
+                </span>
               </div>
-              <div className="flex items-center justify-between border-b border-border/50 pb-1.5">
-                <span>Embedding Model:</span>
-                <span className="font-mono text-[11px] text-text-primary">all-MiniLM-L6-v2</span>
-              </div>
-              <div className="flex items-center justify-between border-b border-border/50 pb-1.5">
-                <span>Vector Dimensions:</span>
-                <span className="font-mono font-bold text-text-primary">384-dim</span>
-              </div>
-              <div className="flex items-center justify-between border-b border-border/50 pb-1.5">
-                <span>Chunk Size / Overlap:</span>
-                <span className="font-mono text-[11px] text-text-primary">500 chars / 100 ovl</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span>Microservice Port:</span>
-                <span className="font-mono font-bold text-cherry dark:text-lime">Port 8003</span>
-              </div>
+              <textarea
+                rows={8}
+                required
+                value={rawText}
+                onChange={(e) => setRawText(e.target.value)}
+                placeholder="Paste full text of policy, clauses, handbooks, or SOPs here..."
+                className="w-full p-3 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime font-mono leading-relaxed"
+              />
             </div>
+          )}
+
+          {/* Scope & Access Control Tagging */}
+          <div className="pt-2 border-t border-border space-y-3">
+            <label className="block text-xs font-bold text-text-primary">
+              Document Scope & Access Permissions
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => setScopeType("company-wide")}
+                className={`p-2.5 border rounded-sm text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
+                  scopeType === "company-wide"
+                    ? "border-cherry dark:border-lime bg-bg text-text-primary font-bold shadow-xs"
+                    : "border-border bg-input-bg text-text-secondary hover:text-text-primary"
+                }`}
+              >
+                <Globe size={14} className={scopeType === "company-wide" ? "text-cherry dark:text-lime" : ""} />
+                <span>Company-Wide</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setScopeType("branch")}
+                className={`p-2.5 border rounded-sm text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
+                  scopeType === "branch"
+                    ? "border-cherry dark:border-lime bg-bg text-text-primary font-bold shadow-xs"
+                    : "border-border bg-input-bg text-text-secondary hover:text-text-primary"
+                }`}
+              >
+                <Building2 size={14} className={scopeType === "branch" ? "text-cherry dark:text-lime" : ""} />
+                <span>Specific Branch</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setScopeType("department")}
+                className={`p-2.5 border rounded-sm text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
+                  scopeType === "department"
+                    ? "border-cherry dark:border-lime bg-bg text-text-primary font-bold shadow-xs"
+                    : "border-border bg-input-bg text-text-secondary hover:text-text-primary"
+                }`}
+              >
+                <FolderTree size={14} className={scopeType === "department" ? "text-cherry dark:text-lime" : ""} />
+                <span>Specific Dept</span>
+              </button>
+            </div>
+
+            {/* Branch selector if specific branch selected */}
+            {scopeType === "branch" && (
+              <div className="pt-2 animate-fadeIn">
+                <label className="block text-xs font-semibold text-text-secondary mb-1">
+                  Select Target Branch:
+                </label>
+                <select
+                  value={selectedBranchId}
+                  onChange={(e) => setSelectedBranchId(e.target.value)}
+                  className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                >
+                  {branches.map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {b.name} ({b.location})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* Department selector if specific department selected */}
+            {scopeType === "department" && (
+              <div className="pt-2 animate-fadeIn">
+                <label className="block text-xs font-semibold text-text-secondary mb-1">
+                  Select Target Department:
+                </label>
+                <select
+                  value={selectedDeptId}
+                  onChange={(e) => setSelectedDeptId(e.target.value)}
+                  className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                >
+                  {departments.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name} (Dept #{d.id})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
-        </div>
+
+          {/* Submit CTA */}
+          <div className="pt-3 border-t border-border flex justify-end">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full sm:w-auto px-6 py-2.5 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all shadow-sm disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-btn-text border-t-transparent rounded-full animate-spin" />
+                  <span>Embedding into ChromaDB...</span>
+                </>
+              ) : (
+                <>
+                  <Layers size={16} />
+                  <span>Ingest & Generate Embeddings</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
       </div>
 
       {/* Registry Table: All Ingested Documents in Knowledge Base */}
