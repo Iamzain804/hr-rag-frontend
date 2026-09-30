@@ -53,25 +53,25 @@ export function LoginPage() {
 
       {/* Centered Login Card */}
       <main className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-surface border border-border rounded-sm p-8 shadow-sm animate-scaleIn">
-          <div className="mb-6 text-center space-y-2">
+        <div className="w-full max-w-md bg-surface border border-border/80 rounded-2xl p-8 sm:p-10 shadow-xl backdrop-blur-md animate-scaleIn transition-all">
+          <div className="mb-8 text-center space-y-3">
             <div className="flex justify-center">
               <CrocodileLogo size="xl" />
             </div>
-            <h1 className="text-xl font-bold tracking-tight text-text-primary">
+            <h1 className="text-2xl font-bold tracking-tight text-text-primary">
               Employee Sign In
             </h1>
-            <p className="text-xs text-text-secondary">
+            <p className="text-xs text-text-secondary leading-relaxed">
               Enter your corporate credentials to access the contextual HR assistant
             </p>
           </div>
 
           {loginError && (
             <div
-              className="p-3 mb-6 bg-bg border border-cherry/40 dark:border-vibrantRed/50 text-cherry dark:text-vibrantRed rounded-sm flex items-start gap-2 text-sm font-medium"
+              className="p-3.5 mb-6 bg-vibrantRed/10 border border-vibrantRed/30 text-vibrantRed rounded-xl flex items-start gap-2.5 text-xs font-semibold animate-fadeIn"
               role="alert"
             >
-              <ShieldAlert size={18} className="mt-0.5 shrink-0 text-cherry dark:text-vibrantRed" />
+              <ShieldAlert size={17} className="shrink-0 text-vibrantRed mt-0.5" />
               <span>{loginError}</span>
             </div>
           )}
@@ -81,9 +81,9 @@ export function LoginPage() {
             <div>
               <label
                 htmlFor="login-email"
-                className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1"
+                className="block text-xs font-bold text-text-primary mb-1.5"
               >
-                Work Email
+                Work Email Address
               </label>
               <div className="relative">
                 <input
@@ -96,9 +96,9 @@ export function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
-                  className="w-full px-3 py-2.5 bg-input-bg border border-border text-text-primary text-sm rounded-sm focus:outline-none focus:border-cherry dark:focus:border-lime focus:ring-1 focus:ring-cherry dark:focus:ring-lime placeholder:text-text-secondary/60 transition-colors"
+                  className="w-full pl-3.5 pr-10 py-2.5 bg-input-bg border border-border text-text-primary text-xs rounded-xl focus:outline-none focus:border-cherry dark:focus:border-lime focus:ring-2 focus:ring-cherry/20 dark:focus:ring-lime/20 placeholder:text-text-secondary/60 transition-all shadow-xs"
                 />
-                <Mail size={16} className="absolute right-3 top-3 text-text-secondary" />
+                <Mail size={16} className="absolute right-3.5 top-3 text-text-secondary" />
               </div>
             </div>
 
@@ -106,7 +106,7 @@ export function LoginPage() {
             <div>
               <label
                 htmlFor="login-password"
-                className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1"
+                className="block text-xs font-bold text-text-primary mb-1.5"
               >
                 Password
               </label>
@@ -121,9 +121,9 @@ export function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full px-3 py-2.5 bg-input-bg border border-border text-text-primary text-sm rounded-sm focus:outline-none focus:border-cherry dark:focus:border-lime focus:ring-1 focus:ring-cherry dark:focus:ring-lime placeholder:text-text-secondary/60 transition-colors"
+                  className="w-full pl-3.5 pr-10 py-2.5 bg-input-bg border border-border text-text-primary text-xs rounded-xl focus:outline-none focus:border-cherry dark:focus:border-lime focus:ring-2 focus:ring-cherry/20 dark:focus:ring-lime/20 placeholder:text-text-secondary/60 transition-all shadow-xs"
                 />
-                <Lock size={16} className="absolute right-3 top-3 text-text-secondary" />
+                <Lock size={16} className="absolute right-3.5 top-3 text-text-secondary" />
               </div>
             </div>
 
@@ -132,7 +132,7 @@ export function LoginPage() {
               type="submit"
               tabIndex={3}
               disabled={isSubmitting}
-              className="w-full mt-2 py-2.5 px-4 bg-btn-bg text-btn-text text-sm font-semibold rounded-sm hover:bg-btn-hover transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
+              className="w-full mt-3 py-2.5 px-4 bg-btn-bg text-btn-text text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-btn-hover transition-all duration-150 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2 shadow-md"
             >
               {isSubmitting ? (
                 <>
@@ -145,9 +145,11 @@ export function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-border text-center text-xs text-text-secondary">
-            Default credentials for testing: <br />
-            <code className="font-mono text-[11px] text-cherry dark:text-lime font-bold">admin@example.com / Admin@123456</code>
+          <div className="mt-8 pt-4 border-t border-border text-center text-xs text-text-secondary space-y-1">
+            <span>Default credentials for testing:</span>
+            <div className="font-mono text-[11px] text-cherry dark:text-lime font-bold">
+              admin@example.com / Admin@123456
+            </div>
           </div>
         </div>
       </main>

@@ -3,60 +3,60 @@
 @tailwind utilities;
 
 :root {
-  /* Light Mode Palette: Cream Vanilla (#efe6dd) + Cherry (#9a0002) */
-  --color-bg: #efe6dd;
-  --color-surface: #e4dacd;
-  --color-surface-hover: #dcd0c2;
-  --color-border: #cdbeaf;
-  --color-text-primary: #1c1514;
-  --color-text-secondary: #5e4f4a;
+  /* Light Mode Palette: Ultra-clean Slate White + Rose Crimson + Emerald */
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #64748b;
   
-  --color-btn-bg: #9a0002;
+  --color-btn-bg: #e11d48;
   --color-btn-text: #ffffff;
-  --color-btn-hover: #7e0002;
-  --color-input-bg: #f9f5f0;
+  --color-btn-hover: #be123c;
+  --color-input-bg: #ffffff;
 
   /* Accents */
-  --accent-cherry: #9a0002;
-  --accent-red: #9a0002;
-  --accent-lime: #4d7c0f;
-  --accent-highlight: #9a0002;
+  --accent-cherry: #e11d48;
+  --accent-red: #ef4444;
+  --accent-lime: #059669;
+  --accent-highlight: #e11d48;
 
   /* Neutral scale aliases */
-  --tone-1: #efe6dd;
-  --tone-2: #e4dacd;
-  --tone-3: #cdbeaf;
-  --tone-4: #5e4f4a;
-  --tone-5: #9a0002;
+  --tone-1: #ffffff;
+  --tone-2: #f8fafc;
+  --tone-3: #e2e8f0;
+  --tone-4: #64748b;
+  --tone-5: #0f172a;
 }
 
 .dark,
 [data-theme="dark"] {
-  /* Dark Mode Palette: Deep Black (#121212) + Vibrant Red (#f9100c) + Lime Green (#d3ff00) */
-  --color-bg: #121212;
-  --color-surface: #1e1b1b;
-  --color-surface-hover: #292424;
-  --color-border: #383030;
-  --color-text-primary: #fcfbfa;
-  --color-text-secondary: #b3a8a6;
+  /* Dark Mode Palette: Deep Obsidian (#090d16) + Glass Slate (#111827) + Vivid Rose (#f43f5e) + Emerald (#10b981) */
+  --color-bg: #090d16;
+  --color-surface: #111827;
+  --color-surface-hover: #1e293b;
+  --color-border: #1e293b;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
   
-  --color-btn-bg: #f9100c;
+  --color-btn-bg: #f43f5e;
   --color-btn-text: #ffffff;
-  --color-btn-hover: #d90e0a;
-  --color-input-bg: #181515;
+  --color-btn-hover: #e11d48;
+  --color-input-bg: #0d1322;
 
   /* Accents */
-  --accent-cherry: #f9100c;
-  --accent-red: #f9100c;
-  --accent-lime: #d3ff00;
-  --accent-highlight: #d3ff00;
+  --accent-cherry: #f43f5e;
+  --accent-red: #ef4444;
+  --accent-lime: #10b981;
+  --accent-highlight: #10b981;
 
   /* Neutral scale aliases */
-  --tone-1: #fcfbfa;
-  --tone-2: #1e1b1b;
-  --tone-3: #383030;
-  --tone-4: #b3a8a6;
-  --tone-5: #121212;
+  --tone-1: #f8fafc;
+  --tone-2: #111827;
+  --tone-3: #1e293b;
+  --tone-4: #94a3b8;
+  --tone-5: #090d16;
 }
 
 * {
@@ -68,12 +68,31 @@ body {
   padding: 0;
   background-color: var(--color-bg);
   color: var(--color-text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 input, select, textarea, button {
   font-family: inherit;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
 }
