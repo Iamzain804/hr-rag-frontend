@@ -78,6 +78,26 @@ export const api = {
 
   // RBAC
   getRoles: () => request("/roles"),
+  getRole: (roleId) => request(`/roles/${roleId}`),
+  createRole: (payload) =>
+    request("/roles", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+  updateRole: (roleId, payload) =>
+    request(`/roles/${roleId}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    }),
+  assignRolePermissions: (roleId, permissionIds) =>
+    request(`/roles/${roleId}/permissions`, {
+      method: "POST",
+      body: JSON.stringify({ permission_ids: permissionIds }),
+    }),
+  deleteRole: (roleId) =>
+    request(`/roles/${roleId}`, {
+      method: "DELETE",
+    }),
   getPermissions: () => request("/permissions"),
 
   // Organization & Branches

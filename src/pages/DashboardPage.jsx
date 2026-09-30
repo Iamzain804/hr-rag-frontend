@@ -21,6 +21,7 @@ import { BranchesView } from "../components/organization/BranchesView";
 import { DepartmentsView } from "../components/organization/DepartmentsView";
 import { DocumentIngestionView } from "../components/ingestion/DocumentIngestionView";
 import { UserManagementView } from "../components/users/UserManagementView";
+import { RolesManagementView } from "../components/rbac/RolesManagementView";
 
 export function DashboardPage() {
   const { user, permissions, hasAnyPermission, error: authError, refreshContext } = useAuth();
@@ -179,48 +180,7 @@ export function DashboardPage() {
           {activeTab === "users" && <UserManagementView />}
 
           {/* Tab: RBAC */}
-          {activeTab === "rbac" && (
-            <div className="space-y-6 w-full max-w-7xl mx-auto animate-fadeIn">
-              <div className="border-b border-border pb-4">
-                <h1 className="text-2xl font-bold tracking-tight text-text-primary">
-                  Roles & Permissions (RBAC)
-                </h1>
-                <p className="text-sm text-text-secondary mt-1">
-                  Role configurations and assigned privilege matrices
-                </p>
-              </div>
-
-              {sectionLoading ? (
-                <LoadingSpinner message="Loading RBAC matrix..." />
-              ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  {rolesList.map((r) => (
-                    <div key={r.id} className="p-5 border border-border bg-surface rounded-sm hover:border-cherry/40 dark:hover:border-lime/40 transition-colors shadow-2xs flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="font-bold text-text-primary text-base">{r.name}</div>
-                          <span className="text-xs text-cherry dark:text-lime font-semibold">
-                            {r.permissions?.length || 0} permissions
-                          </span>
-                        </div>
-                        <p className="text-xs text-text-secondary mb-4 leading-relaxed">{r.description}</p>
-                      </div>
-                      <div className="flex flex-wrap gap-1.5 pt-3 border-t border-border">
-                        {r.permissions?.map((p) => (
-                          <span
-                            key={p.id}
-                            className="px-2 py-0.5 border border-border bg-bg text-[11px] font-mono rounded-sm text-cherry dark:text-lime"
-                          >
-                            {p.name}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+          {activeTab === "rbac" && <RolesManagementView />}
 
           {/* Tab: RAG Chat */}
           {activeTab === "rag-chat" && <ChatView />}
