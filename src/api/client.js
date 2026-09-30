@@ -112,6 +112,11 @@ export const api = {
       method: "POST",
       body: JSON.stringify(payload),
     }),
+  updateUser: (userId, payload) =>
+    request(`/users/${userId}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    }),
   deleteUser: (userId) =>
     request(`/users/${userId}`, {
       method: "DELETE",

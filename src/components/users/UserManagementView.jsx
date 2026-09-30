@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Users,
   UserPlus,
@@ -16,13 +16,18 @@ import {
   Search,
   Trash2,
   Send,
+  MoreVertical,
+  Edit2,
+  Power,
+  UserCheck,
+  UserX,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../api/client";
 import { LoadingSpinner } from "../LoadingSpinner";
 
 export function UserManagementView() {
-  const { hasAnyPermission } = useAuth();
+  const { user: currentUser, hasAnyPermission } = useAuth();
   const canManageUsers = hasAnyPermission(["manage_users"]);
 
   const [users, setUsers] = useState([]);
@@ -34,14 +39,18 @@ export function UserManagementView() {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
+  // 3-dot Menu State
+  const [openActionMenuId, setOpenActionMenuId] = useState(null);
+  const menuRef = useRef(null);
+
   // Add User Modal State
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [modalError, setModalError] = useState("");
   const [createdUserData, setCreatedUserData] = useState(null);
   const [copiedPassword, setCopiedPassword] = useState(false);
 
-  // Form Fields
+  // Add Form Fields
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -50,8 +59,31 @@ export function UserManagementView() {
   const [deptId, setDeptId] = useState("");
   const [sendNotificationEmail, setSendNotificationEmail] = useState(true);
 
+  // Edit User Modal State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState(null);
+  const [editFirstName, setEditFirstName] = useState("");
+  const [editLastName, setEditLastName] = useState("");
+  const [editRoleId, setEditRoleId] = useState("");
+  const [editBranchId, setEditBranchId] = useState("");
+  const [editDeptId, setEditDeptId] = useState("");
+  const [editIsActive, setEditIsActive] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [editModalError, setEditModalError] = useState("");
+
   useEffect(() => {
     loadAllData();
+  }, []);
+
+  // Close 3-dot action dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpenActionMenuId(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const loadAllData = async () => {
@@ -69,7 +101,7 @@ export function UserManagementView() {
       setBranches(bData || []);
       setDepartments(dData || []);
 
-      // Set defaults for form if empty
+      // Set default role for Add form
       if (rData && rData.length > 0 && !roleId) {
         const empRole = rData.find((r) => r.name?.toLowerCase().includes("employee")) || rData[0];
         setRoleId(String(empRole.id));
@@ -81,7 +113,8 @@ export function UserManagementView() {
     }
   };
 
-  const handleOpenModal = () => {
+  // --- ADD USER HANDLERS ---
+  const handleOpenAddModal = () => {
     setFirstName("");
     setLastName("");
     setEmail("");
@@ -96,11 +129,12 @@ export function UserManagementView() {
       const empRole = roles.find((r) => r.name?.toLowerCase().includes("employee")) || roles[0];
       setRoleId(String(empRole.id));
     }
-    setIsModalOpen(true);
+    setIsAddModalOpen(true);
+    setOpenActionMenuId(null);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
     setCreatedUserData(null);
     setModalError("");
   };
@@ -131,10 +165,8 @@ export function UserManagementView() {
         department_id: deptId ? parseInt(deptId, 10) : null,
       };
 
-      // 1. Create user in identity service
       const newUser = await api.createUser(payload);
 
-      // 2. Dispatch welcome email via notification service if requested
       let emailDispatched = false;
       if (sendNotificationEmail && newUser.temporary_password) {
         try {
@@ -146,7 +178,6 @@ export function UserManagementView() {
           });
           emailDispatched = true;
         } catch {
-          // Notification service error shouldn't fail user creation, but flag it
           emailDispatched = false;
         }
       }
@@ -156,7 +187,6 @@ export function UserManagementView() {
         emailDispatched,
       });
 
-      // Refresh directory in background
       loadAllData();
       setSuccessMsg(`User '${newUser.email}' created successfully.`);
       setTimeout(() => setSuccessMsg(""), 4000);
@@ -167,8 +197,78 @@ export function UserManagementView() {
     }
   };
 
+  // --- EDIT USER HANDLERS ---
+  const handleOpenEditModal = (userToEdit) => {
+    setEditingUser(userToEdit);
+    setEditFirstName(userToEdit.first_name || "");
+    setEditLastName(userToEdit.last_name || "");
+    setEditRoleId(String(userToEdit.role_id || ""));
+    setEditBranchId(userToEdit.branch_id ? String(userToEdit.branch_id) : "");
+    setEditDeptId(userToEdit.department_id ? String(userToEdit.department_id) : "");
+    setEditIsActive(Boolean(userToEdit.is_active));
+    setEditModalError("");
+    setIsEditModalOpen(true);
+    setOpenActionMenuId(null);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingUser(null);
+    setEditModalError("");
+  };
+
+  const handleUpdateUser = async (e) => {
+    e.preventDefault();
+    if (!editingUser) return;
+    setEditModalError("");
+
+    if (!editFirstName.trim() || !editRoleId) {
+      setEditModalError("First name and role are required.");
+      return;
+    }
+
+    setIsUpdating(true);
+    try {
+      const payload = {
+        first_name: editFirstName.trim(),
+        last_name: editLastName.trim() || null,
+        role_id: parseInt(editRoleId, 10),
+        branch_id: editBranchId ? parseInt(editBranchId, 10) : null,
+        department_id: editDeptId ? parseInt(editDeptId, 10) : null,
+        is_active: editIsActive,
+      };
+
+      await api.updateUser(editingUser.id, payload);
+      setSuccessMsg(`User '${editingUser.email}' updated successfully.`);
+      setTimeout(() => setSuccessMsg(""), 4000);
+      handleCloseEditModal();
+      loadAllData();
+    } catch (err) {
+      setEditModalError(err.message || "Failed to update user account.");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // --- STATUS TOGGLE & DELETE HANDLERS ---
+  const handleToggleStatus = async (userItem) => {
+    setOpenActionMenuId(null);
+    const newStatus = !userItem.is_active;
+    const actionLabel = newStatus ? "activate" : "deactivate";
+
+    try {
+      await api.updateUser(userItem.id, { is_active: newStatus });
+      setSuccessMsg(`User '${userItem.email}' is now ${newStatus ? "Active" : "Inactive"}.`);
+      setTimeout(() => setSuccessMsg(""), 4000);
+      loadAllData();
+    } catch (err) {
+      setErrorMsg(err.message || `Failed to ${actionLabel} user.`);
+    }
+  };
+
   const handleDeleteUser = async (userId, userEmail) => {
-    if (!window.confirm(`Are you sure you want to deactivate user account '${userEmail}'?`)) {
+    setOpenActionMenuId(null);
+    if (!window.confirm(`Are you sure you want to deactivate and remove user account '${userEmail}'?`)) {
       return;
     }
 
@@ -182,7 +282,7 @@ export function UserManagementView() {
     }
   };
 
-  // Filter users by search
+  // Filter users by search query
   const filteredUsers = users.filter((u) => {
     const fullName = `${u.first_name || ""} ${u.last_name || ""}`.toLowerCase();
     const emailStr = (u.email || "").toLowerCase();
@@ -200,7 +300,7 @@ export function UserManagementView() {
             <Users className="text-cherry dark:text-lime" size={26} /> User Management
           </h1>
           <p className="text-sm text-text-secondary mt-1">
-            Manage company employees, assign roles, and configure branch/department access
+            Manage company employees, assign roles, configure permissions, and update accounts
           </p>
         </div>
 
@@ -217,7 +317,7 @@ export function UserManagementView() {
           {canManageUsers && (
             <button
               type="button"
-              onClick={handleOpenModal}
+              onClick={handleOpenAddModal}
               className="flex items-center gap-2 px-4 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all shadow-sm"
             >
               <UserPlus size={16} />
@@ -275,7 +375,7 @@ export function UserManagementView() {
           </p>
         </div>
       ) : (
-        <div className="border border-border bg-surface rounded-sm overflow-x-auto shadow-xs">
+        <div className="border border-border bg-surface rounded-sm overflow-visible shadow-xs">
           <table className="w-full text-left text-xs min-w-[750px]">
             <thead className="border-b border-border bg-bg uppercase tracking-wider text-text-secondary font-bold text-[11px]">
               <tr>
@@ -292,11 +392,12 @@ export function UserManagementView() {
               {filteredUsers.map((u) => {
                 const userBranch = branches.find((b) => b.id === u.branch_id);
                 const userDept = departments.find((d) => d.id === u.department_id);
+                const isActionMenuOpen = openActionMenuId === u.id;
 
                 return (
                   <tr key={u.id} className="hover:bg-bg/50 transition-colors">
                     <td className="p-3.5 font-semibold text-text-primary flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-cherry/10 dark:bg-lime/10 border border-cherry/30 dark:border-lime/30 text-cherry dark:text-lime font-bold flex items-center justify-center text-xs">
+                      <div className="w-7 h-7 rounded-full bg-cherry/10 dark:bg-lime/10 border border-cherry/30 dark:border-lime/30 text-cherry dark:text-lime font-bold flex items-center justify-center text-xs shrink-0">
                         {(u.first_name?.[0] || "U").toUpperCase()}
                       </div>
                       <span>
@@ -329,25 +430,82 @@ export function UserManagementView() {
                     </td>
                     <td className="p-3.5">
                       <span
-                        className={`px-2 py-0.5 border rounded-sm text-[10px] uppercase font-bold ${
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 border rounded-sm text-[11px] font-semibold ${
                           u.is_active
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
+                            ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30"
                             : "bg-bg text-text-secondary border-border"
                         }`}
                       >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            u.is_active ? "bg-emerald-500 animate-pulse" : "bg-text-secondary/50"
+                          }`}
+                        />
                         {u.is_active ? "Active" : "Inactive"}
                       </span>
                     </td>
+
+                    {/* 3-DOT VERTICAL ACTION DROPDOWN */}
                     {canManageUsers && (
-                      <td className="p-3.5 text-right">
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteUser(u.id, u.email)}
-                          title="Deactivate User"
-                          className="p-1.5 text-text-secondary hover:text-vibrantRed hover:bg-vibrantRed/10 rounded-sm transition-colors"
-                        >
-                          <Trash2 size={14} />
-                        </button>
+                      <td className="p-3.5 text-right relative">
+                        <div className="inline-block text-left" ref={isActionMenuOpen ? menuRef : null}>
+                          <button
+                            type="button"
+                            onClick={() => setOpenActionMenuId(isActionMenuOpen ? null : u.id)}
+                            title="Manage User Actions"
+                            className={`p-1.5 rounded-sm border transition-colors ${
+                              isActionMenuOpen
+                                ? "bg-surface border-cherry dark:border-lime text-cherry dark:text-lime"
+                                : "border-border/60 hover:border-border bg-bg hover:bg-surface text-text-secondary hover:text-text-primary"
+                            }`}
+                          >
+                            <MoreVertical size={16} />
+                          </button>
+
+                          {/* Floating Dropdown Menu */}
+                          {isActionMenuOpen && (
+                            <div className="absolute right-3.5 top-11 z-50 w-44 bg-surface border border-border rounded-sm shadow-xl py-1 text-left animate-scaleIn select-none">
+                              {/* Option 1: Edit User */}
+                              <button
+                                type="button"
+                                onClick={() => handleOpenEditModal(u)}
+                                className="w-full px-3 py-2 text-xs font-medium text-text-primary hover:bg-surface-hover flex items-center gap-2 transition-colors"
+                              >
+                                <Edit2 size={13} className="text-cherry dark:text-lime" />
+                                <span>Edit Details</span>
+                              </button>
+
+                              {/* Option 2: Toggle Active / Inactive Status */}
+                              <button
+                                type="button"
+                                onClick={() => handleToggleStatus(u)}
+                                className="w-full px-3 py-2 text-xs font-medium text-text-primary hover:bg-surface-hover flex items-center gap-2 transition-colors border-t border-border/40"
+                              >
+                                {u.is_active ? (
+                                  <>
+                                    <UserX size={13} className="text-amber-500" />
+                                    <span>Set as Inactive</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <UserCheck size={13} className="text-emerald-500" />
+                                    <span>Set as Active</span>
+                                  </>
+                                )}
+                              </button>
+
+                              {/* Option 3: Delete / Deactivate User */}
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteUser(u.id, u.email)}
+                                className="w-full px-3 py-2 text-xs font-medium text-vibrantRed hover:bg-vibrantRed/10 flex items-center gap-2 transition-colors border-t border-border/40"
+                              >
+                                <Trash2 size={13} />
+                                <span>Delete User</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </td>
                     )}
                   </tr>
@@ -358,11 +516,166 @@ export function UserManagementView() {
         </div>
       )}
 
-      {/* ================= ADD USER MODAL POPUP ================= */}
-      {isModalOpen && (
+      {/* ================= EDIT USER MODAL POPUP ================= */}
+      {isEditModalOpen && editingUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-fadeIn">
           <div className="border border-border bg-surface rounded-sm w-full max-w-lg shadow-2xl overflow-hidden animate-scaleIn">
-            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 border-b border-border bg-bg/50">
+              <div className="flex items-center gap-2">
+                <Edit2 size={18} className="text-cherry dark:text-lime" />
+                <h3 className="font-bold text-sm text-text-primary">
+                  Edit User: {editingUser.email}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={handleCloseEditModal}
+                className="p-1 text-text-secondary hover:text-text-primary rounded-sm transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateUser} className="p-6 space-y-4">
+              {editModalError && (
+                <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2">
+                  <AlertCircle size={15} className="shrink-0" />
+                  <span>{editModalError}</span>
+                </div>
+              )}
+
+              {/* Name Fields */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-text-primary mb-1">
+                    First Name <span className="text-vibrantRed">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editFirstName}
+                    onChange={(e) => setEditFirstName(e.target.value)}
+                    className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-text-primary mb-1">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    value={editLastName}
+                    onChange={(e) => setEditLastName(e.target.value)}
+                    className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                  />
+                </div>
+              </div>
+
+              {/* Role Selection */}
+              <div>
+                <label className="block text-xs font-bold text-text-primary mb-1">
+                  Assigned Role <span className="text-vibrantRed">*</span>
+                </label>
+                <select
+                  value={editRoleId}
+                  onChange={(e) => setEditRoleId(e.target.value)}
+                  className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                >
+                  {roles.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.name} — ({r.description || `${r.permissions?.length || 0} permissions`})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Branch & Dept */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-text-primary mb-1">
+                    Assigned Branch
+                  </label>
+                  <select
+                    value={editBranchId}
+                    onChange={(e) => setEditBranchId(e.target.value)}
+                    className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                  >
+                    <option value="">Company-Wide / Universal</option>
+                    {branches.map((b) => (
+                      <option key={b.id} value={b.id}>
+                        {b.name} ({b.location})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-text-primary mb-1">
+                    Assigned Department
+                  </label>
+                  <select
+                    value={editDeptId}
+                    onChange={(e) => setEditDeptId(e.target.value)}
+                    className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                  >
+                    <option value="">General / All</option>
+                    {departments.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Active Status Toggle */}
+              <div className="pt-2 border-t border-border">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={editIsActive}
+                    onChange={(e) => setEditIsActive(e.target.checked)}
+                    className="rounded-sm border-border text-cherry dark:text-lime focus:ring-0"
+                  />
+                  <span className="text-xs text-text-primary font-semibold">
+                    Account is Active and Allowed to Login
+                  </span>
+                </label>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-3 border-t border-border flex items-center justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={handleCloseEditModal}
+                  className="px-4 py-2 border border-border bg-surface hover:bg-surface-hover rounded-sm text-xs font-semibold text-text-secondary transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isUpdating}
+                  className="px-5 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all shadow-sm disabled:opacity-50 flex items-center gap-2"
+                >
+                  {isUpdating ? (
+                    <>
+                      <div className="w-3.5 h-3.5 border-2 border-btn-text border-t-transparent rounded-full animate-spin" />
+                      <span>Saving Changes...</span>
+                    </>
+                  ) : (
+                    <span>Save Changes</span>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ================= ADD USER MODAL POPUP ================= */}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-fadeIn">
+          <div className="border border-border bg-surface rounded-sm w-full max-w-lg shadow-2xl overflow-hidden animate-scaleIn">
             <div className="flex items-center justify-between p-4 border-b border-border bg-bg/50">
               <div className="flex items-center gap-2">
                 <UserPlus size={18} className="text-cherry dark:text-lime" />
@@ -372,16 +685,14 @@ export function UserManagementView() {
               </div>
               <button
                 type="button"
-                onClick={handleCloseModal}
+                onClick={handleCloseAddModal}
                 className="p-1 text-text-secondary hover:text-text-primary rounded-sm transition-colors"
               >
                 <X size={16} />
               </button>
             </div>
 
-            {/* Modal Content */}
             <div className="p-6 space-y-4">
-              {/* SUCCESS VIEW: Show credentials and notification dispatch */}
               {createdUserData ? (
                 <div className="space-y-4">
                   <div className="p-4 border border-emerald-500/50 bg-emerald-500/10 rounded-sm space-y-2">
@@ -395,7 +706,6 @@ export function UserManagementView() {
                     </p>
                   </div>
 
-                  {/* Temporary Password Box */}
                   <div className="p-4 border border-border bg-bg rounded-sm space-y-2">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-text-secondary flex items-center gap-1.5">
@@ -427,7 +737,6 @@ export function UserManagementView() {
                     </p>
                   </div>
 
-                  {/* Notification Status */}
                   <div className="p-3 border border-border bg-surface rounded-sm flex items-center gap-2.5 text-xs">
                     <Send size={15} className="text-cherry dark:text-lime shrink-0" />
                     <span className="text-text-secondary">
@@ -439,11 +748,10 @@ export function UserManagementView() {
                     </span>
                   </div>
 
-                  {/* Done Button */}
                   <div className="pt-2 flex justify-end">
                     <button
                       type="button"
-                      onClick={handleCloseModal}
+                      onClick={handleCloseAddModal}
                       className="px-6 py-2.5 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all"
                     >
                       Done & Close
@@ -451,7 +759,6 @@ export function UserManagementView() {
                   </div>
                 </div>
               ) : (
-                /* FORM VIEW */
                 <form onSubmit={handleCreateUser} className="space-y-4">
                   {modalError && (
                     <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2">
@@ -460,7 +767,6 @@ export function UserManagementView() {
                     </div>
                   )}
 
-                  {/* Name Fields (Grid 2 cols) */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-bold text-text-primary mb-1">
@@ -489,7 +795,6 @@ export function UserManagementView() {
                     </div>
                   </div>
 
-                  {/* Email Address */}
                   <div>
                     <label className="block text-xs font-bold text-text-primary mb-1">
                       Email Address <span className="text-vibrantRed">*</span>
@@ -507,7 +812,6 @@ export function UserManagementView() {
                     </div>
                   </div>
 
-                  {/* Role Assignment */}
                   <div>
                     <label className="block text-xs font-bold text-text-primary mb-1">
                       Assign Role <span className="text-vibrantRed">*</span>
@@ -525,7 +829,6 @@ export function UserManagementView() {
                     </select>
                   </div>
 
-                  {/* Branch & Department Assignment (Grid 2 cols) */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-bold text-text-primary mb-1">
@@ -564,7 +867,6 @@ export function UserManagementView() {
                     </div>
                   </div>
 
-                  {/* Email Notification Checkbox */}
                   <div className="pt-2 border-t border-border">
                     <label className="flex items-center gap-2 cursor-pointer select-none">
                       <input
@@ -579,11 +881,10 @@ export function UserManagementView() {
                     </label>
                   </div>
 
-                  {/* Modal Footer Buttons */}
                   <div className="pt-3 border-t border-border flex items-center justify-end gap-2.5">
                     <button
                       type="button"
-                      onClick={handleCloseModal}
+                      onClick={handleCloseAddModal}
                       className="px-4 py-2 border border-border bg-surface hover:bg-surface-hover rounded-sm text-xs font-semibold text-text-secondary transition-colors"
                     >
                       Cancel
