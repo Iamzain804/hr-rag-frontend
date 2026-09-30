@@ -98,7 +98,7 @@ export function ChatInput({
   };
 
   return (
-    <div className="p-3 sm:p-4 bg-surface border-t border-border shrink-0 shadow-lg">
+    <div className="p-3 sm:p-4 bg-surface/90 backdrop-blur-md border-t border-border/70 shrink-0 shadow-lg">
       <div className="max-w-4xl mx-auto space-y-2">
         {/* Hidden File Input */}
         <input
@@ -111,7 +111,7 @@ export function ChatInput({
 
         {/* Attachment Pill Indicator */}
         {(attachmentFile || attachmentText) && (
-          <div className="p-2.5 px-3 border border-border bg-bg rounded-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs animate-fadeIn">
+          <div className="p-2.5 px-3.5 border border-border/80 bg-bg rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs animate-fadeIn">
             <div className="flex items-center gap-2 overflow-hidden">
               {attachmentFile ? (
                 attachmentFile.type.startsWith("image/") ? (
@@ -126,18 +126,18 @@ export function ChatInput({
                 {attachmentFile ? attachmentFile.name : `Pasted text (${attachmentText.length} chars)`}
               </span>
               <span className="text-[10px] text-text-secondary hidden md:inline font-mono">
-                &bull; Ephemeral attachment
+                &bull; Temporary attachment
               </span>
             </div>
 
             <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
               <span className="text-[11px] text-text-secondary italic">
-                Used only for this question — not saved to knowledge base
+                Included with this inquiry only
               </span>
               <button
                 type="button"
                 onClick={removeAttachment}
-                className="p-1 rounded-sm text-text-secondary hover:text-cherry dark:hover:text-vibrantRed hover:bg-surface transition-colors"
+                className="p-1 rounded-lg text-text-secondary hover:text-cherry dark:hover:text-vibrantRed hover:bg-surface transition-colors"
                 title="Remove attachment"
               >
                 <X size={14} />
@@ -146,10 +146,10 @@ export function ChatInput({
           </div>
         )}
 
-        {/* DeepSeek Style Container Box */}
+        {/* Floating Input Container Box */}
         <form
           onSubmit={handleSend}
-          className="relative border border-border bg-input-bg rounded-lg focus-within:border-cherry dark:focus-within:border-lime transition-all p-2.5 shadow-sm space-y-2"
+          className="relative border border-border/80 bg-input-bg rounded-2xl focus-within:border-cherry dark:focus-within:border-lime focus-within:ring-2 focus-within:ring-cherry/20 dark:focus-within:ring-lime/20 transition-all p-3 shadow-sm space-y-2.5"
         >
           {/* Textarea */}
           <textarea
@@ -158,43 +158,43 @@ export function ChatInput({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about company policies, leave entitlements, medical benefits, or guidelines..."
+            placeholder="Ask anything about leave policies, insurance, allowances, or office timings..."
             disabled={disabled}
             className="w-full bg-transparent border-none outline-none resize-none px-2 py-1 text-sm text-text-primary placeholder:text-text-secondary max-h-48 leading-relaxed font-sans"
           />
 
-          {/* Bottom Toolbar: DeepSeek Mode Pills + Attachments + Send */}
-          <div className="flex items-center justify-between pt-1 border-t border-border/40 gap-2 flex-wrap">
-            {/* Left: DeepSeek-style Toggle Badges & Attachments */}
+          {/* Bottom Toolbar: Mode Pills + Attachments + Send */}
+          <div className="flex items-center justify-between pt-1.5 border-t border-border/40 gap-2 flex-wrap">
+            {/* Left: Toggles & Attachment buttons */}
             <div className="flex items-center gap-1.5 flex-wrap">
               {/* DeepThink / Rerank Mode Badge */}
               <button
                 type="button"
                 onClick={() => setDeepThinkActive((p) => !p)}
-                className={`px-2.5 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 border transition-all ${
+                className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 border transition-all ${
                   deepThinkActive
-                    ? "border-cherry/50 dark:border-lime/50 bg-cherry/10 dark:bg-lime/10 text-cherry dark:text-lime shadow-2xs"
-                    : "border-border bg-surface text-text-secondary opacity-60 hover:opacity-100"
+                    ? "border-cherry/40 dark:border-lime/40 bg-cherry/10 dark:bg-lime/10 text-cherry dark:text-lime shadow-2xs"
+                    : "border-border/60 bg-surface text-text-secondary opacity-60 hover:opacity-100"
                 }`}
-                title="Cross-Encoder Reranking & Deep Reasoning"
+                title="Cross-Encoder Reranking & Precise Document Matching"
               >
                 <Sparkles size={12} />
-                <span>DeepThink (Rerank)</span>
+                <span>Deep Reasoning</span>
               </button>
 
               {/* Document Search Mode Badge */}
               <button
                 type="button"
                 onClick={() => setDocSearchActive((p) => !p)}
-                className={`px-2.5 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 border transition-all ${
+                className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 border transition-all ${
                   docSearchActive
-                    ? "border-cherry/50 dark:border-lime/50 bg-cherry/10 dark:bg-lime/10 text-cherry dark:text-lime shadow-2xs"
-                    : "border-border bg-surface text-text-secondary opacity-60 hover:opacity-100"
+                    ? "border-cherry/40 dark:border-lime/40 bg-cherry/10 dark:bg-lime/10 text-cherry dark:text-lime shadow-2xs"
+                    : "border-border/60 bg-surface text-text-secondary opacity-60 hover:opacity-100"
                 }`}
-                title="Grounded Search across ChromaDB Vector Store"
+                title="Company Knowledge Base Search"
               >
                 <Search size={12} />
-                <span>Doc Search</span>
+                <span>Company Docs</span>
               </button>
 
               {/* Attachment File Trigger */}
@@ -203,7 +203,7 @@ export function ChatInput({
                 onClick={() => fileInputRef.current?.click()}
                 title="Attach PDF, document, or image screenshot"
                 disabled={isStreaming || disabled}
-                className="p-1.5 rounded-sm text-text-secondary hover:text-text-primary hover:bg-surface transition-colors disabled:opacity-50 ml-1"
+                className="p-1.5 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface transition-colors disabled:opacity-50 ml-1"
               >
                 <Paperclip size={17} />
               </button>
@@ -212,9 +212,9 @@ export function ChatInput({
               <button
                 type="button"
                 onClick={() => setShowPasteModal(true)}
-                title="Paste custom text snippet"
+                title="Paste text snippet"
                 disabled={isStreaming || disabled}
-                className="p-1.5 rounded-sm text-text-secondary hover:text-text-primary hover:bg-surface transition-colors disabled:opacity-50 hidden sm:inline-flex"
+                className="p-1.5 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface transition-colors disabled:opacity-50 hidden sm:inline-flex"
               >
                 <Type size={17} />
               </button>
@@ -227,7 +227,7 @@ export function ChatInput({
                   type="button"
                   onClick={onStopGeneration}
                   title="Stop generating response"
-                  className="p-2 rounded-full bg-btn-bg text-btn-text hover:bg-btn-hover transition-colors shadow-sm flex items-center justify-center"
+                  className="p-2.5 rounded-xl bg-btn-bg text-btn-text hover:bg-btn-hover transition-all shadow-sm flex items-center justify-center active:scale-95"
                 >
                   <Square size={14} className="fill-current" />
                 </button>
@@ -236,7 +236,7 @@ export function ChatInput({
                   type="submit"
                   disabled={(!message.trim() && !attachmentFile && !attachmentText.trim()) || disabled}
                   title="Send question (Enter)"
-                  className="p-2 rounded-full bg-btn-bg text-btn-text hover:bg-btn-hover disabled:opacity-30 disabled:hover:bg-btn-bg transition-colors shadow-sm flex items-center justify-center"
+                  className="p-2.5 rounded-xl bg-btn-bg text-btn-text hover:bg-btn-hover disabled:opacity-30 disabled:hover:bg-btn-bg transition-all shadow-sm flex items-center justify-center active:scale-95"
                 >
                   <Send size={15} />
                 </button>
@@ -245,13 +245,13 @@ export function ChatInput({
           </div>
         </form>
 
-        {/* Footer Disclaimer (DeepSeek style) */}
+        {/* Footer Disclaimer */}
         <div className="flex items-center justify-between text-[11px] text-text-secondary px-1 pt-0.5">
           <span>
-            Press <kbd className="px-1 py-0.5 border border-border bg-bg rounded-sm font-mono text-[10px]">Enter</kbd> to send, <kbd className="px-1 py-0.5 border border-border bg-bg rounded-sm font-mono text-[10px]">Shift + Enter</kbd> for new line
+            Press <kbd className="px-1.5 py-0.5 border border-border/80 bg-bg rounded-md font-mono text-[10px]">Enter</kbd> to send, <kbd className="px-1.5 py-0.5 border border-border/80 bg-bg rounded-md font-mono text-[10px]">Shift + Enter</kbd> for new line
           </span>
           <span className="flex items-center gap-1 text-[11px] opacity-80">
-            <HelpCircle size={11} /> HR RAG Assistant is grounded strictly in company documents
+            <HelpCircle size={11} /> Grounded in official company handbooks
           </span>
         </div>
       </div>
@@ -259,34 +259,34 @@ export function ChatInput({
       {/* Paste Text Snippet Modal */}
       {showPasteModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn">
-          <div className="bg-surface border border-border rounded-sm max-w-lg w-full p-6 space-y-4 shadow-lg animate-scaleIn">
+          <div className="bg-surface border border-border/80 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl animate-scaleIn">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-base text-text-primary flex items-center gap-2">
-                <Type size={18} className="text-cherry dark:text-lime" /> Paste Ephemeral Context
+                <Type size={18} className="text-cherry dark:text-lime" /> Paste Context Snippet
               </h3>
               <button
                 type="button"
                 onClick={() => setShowPasteModal(false)}
-                className="p-1 text-text-secondary hover:text-text-primary rounded-sm"
+                className="p-1.5 text-text-secondary hover:text-text-primary rounded-lg hover:bg-bg transition-colors"
               >
                 <X size={16} />
               </button>
             </div>
             <p className="text-xs text-text-secondary">
-              Paste email text or message snippet to include as unverified context for this question only.
+              Paste email text or message snippet to include as context for this question only.
             </p>
             <textarea
               rows={6}
               value={pastedBuffer}
               onChange={(e) => setPastedBuffer(e.target.value)}
               placeholder="Paste email text, memo snippet, or Slack message here..."
-              className="w-full p-3 border border-border bg-input-bg text-text-primary text-xs rounded-sm focus:outline-none focus:border-cherry dark:focus:border-lime resize-none font-mono"
+              className="w-full p-3 border border-border/80 bg-input-bg text-text-primary text-xs rounded-xl focus:outline-none focus:border-cherry dark:focus:border-lime resize-none font-mono"
             />
-            <div className="flex items-center justify-end gap-2 pt-2">
+            <div className="flex items-center justify-end gap-2.5 pt-2">
               <button
                 type="button"
                 onClick={() => setShowPasteModal(false)}
-                className="px-3 py-1.5 border border-border bg-bg text-xs font-semibold rounded-sm hover:bg-surface-hover"
+                className="px-4 py-2 border border-border/80 bg-bg text-xs font-semibold rounded-xl hover:bg-surface-hover transition-colors"
               >
                 Cancel
               </button>
@@ -294,7 +294,7 @@ export function ChatInput({
                 type="button"
                 onClick={handleSavePastedText}
                 disabled={!pastedBuffer.trim()}
-                className="px-4 py-1.5 bg-btn-bg text-btn-text text-xs font-semibold rounded-sm hover:bg-btn-hover disabled:opacity-50"
+                className="px-5 py-2 bg-btn-bg text-btn-text text-xs font-semibold rounded-xl hover:bg-btn-hover disabled:opacity-50 transition-colors shadow-sm"
               >
                 Attach Snippet
               </button>

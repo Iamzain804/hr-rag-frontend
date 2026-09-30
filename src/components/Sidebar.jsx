@@ -90,14 +90,14 @@ export function Sidebar({ activeTab, setActiveTab }) {
         {/* Navigation Header / Mini Toggle */}
         <div className="flex items-center justify-between px-2 mb-3 h-7">
           {!isCollapsed && (
-            <span className="text-xs uppercase font-bold text-text-secondary tracking-wider">
-              Navigation
+            <span className="text-[11px] uppercase font-bold text-text-secondary tracking-wider">
+              Workspace Menu
             </span>
           )}
           <button
             type="button"
             onClick={toggleSidebar}
-            className={`p-1 text-text-secondary hover:text-text-primary rounded-sm transition-colors ${
+            className={`p-1.5 text-text-secondary hover:text-text-primary hover:bg-surface-hover rounded-lg transition-all ${
               isCollapsed ? "mx-auto" : ""
             }`}
             title={isCollapsed ? "Expand Sidebar Menu" : "Collapse Sidebar Menu"}
@@ -107,7 +107,7 @@ export function Sidebar({ activeTab, setActiveTab }) {
         </div>
 
         {/* Menu Items */}
-        <nav className="space-y-1">
+        <nav className="space-y-1.5">
           {visibleItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -117,24 +117,24 @@ export function Sidebar({ activeTab, setActiveTab }) {
                 type="button"
                 onClick={() => setActiveTab(item.id)}
                 title={isCollapsed ? item.label : undefined}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-sm transition-all text-left group relative ${
+                className={`w-full flex items-center gap-3 px-3 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150 text-left group relative select-none ${
                   isActive
-                    ? "bg-bg text-text-primary border-l-4 border-l-cherry dark:border-l-lime font-bold shadow-xs"
-                    : "text-text-secondary hover:text-text-primary hover:bg-surface-hover border-l-4 border-l-transparent"
+                    ? "bg-cherry/10 dark:bg-lime/15 text-cherry dark:text-lime font-bold shadow-xs ring-1 ring-cherry/20 dark:ring-lime/30"
+                    : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
                 } ${isCollapsed ? "justify-center px-0" : ""}`}
               >
                 <Icon
                   size={18}
                   className={`shrink-0 transition-transform group-hover:scale-110 ${
-                    isActive ? "text-cherry dark:text-lime" : ""
+                    isActive ? "text-cherry dark:text-lime" : "text-text-secondary group-hover:text-text-primary"
                   }`}
                 />
 
                 {!isCollapsed && <span className="truncate">{item.label}</span>}
 
-                {/* Hover Tooltip when Collapsed (DeepSeek style) */}
+                {/* Hover Tooltip when Collapsed */}
                 {isCollapsed && (
-                  <div className="absolute left-full ml-2 px-2.5 py-1 bg-surface-hover border border-border text-text-primary text-xs font-semibold rounded-sm whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-lg">
+                  <div className="absolute left-full ml-2 px-2.5 py-1 bg-surface border border-border text-text-primary text-xs font-semibold rounded-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-lg">
                     {item.label}
                   </div>
                 )}

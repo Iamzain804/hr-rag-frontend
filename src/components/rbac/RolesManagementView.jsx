@@ -271,7 +271,7 @@ export function RolesManagementView() {
     return (
       <div className="space-y-6 w-full max-w-5xl mx-auto animate-fadeIn">
         {/* Breadcrumb Header Navigation */}
-        <div className="border-b border-border pb-4 space-y-2">
+        <div className="border-b border-border/70 pb-4 space-y-2">
           <div className="flex items-center gap-2 text-xs font-semibold text-text-secondary">
             <button
               type="button"
@@ -296,7 +296,7 @@ export function RolesManagementView() {
             <button
               type="button"
               onClick={handleBackToList}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-border bg-surface hover:bg-surface-hover rounded-sm text-xs font-semibold text-text-secondary hover:text-text-primary transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 border border-border/80 bg-surface hover:bg-surface-hover rounded-xl text-xs font-semibold text-text-secondary hover:text-text-primary transition-colors shadow-2xs"
             >
               <ArrowLeft size={14} />
               <span>Back to Roles</span>
@@ -306,7 +306,7 @@ export function RolesManagementView() {
 
         {/* Form Error Banner */}
         {formError && (
-          <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2 animate-fadeIn">
+          <div className="p-3.5 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-xl text-xs flex items-center gap-2 animate-fadeIn">
             <AlertCircle size={16} className="shrink-0" />
             <span>{formError}</span>
           </div>
@@ -314,8 +314,8 @@ export function RolesManagementView() {
 
         <form onSubmit={handleSaveRole} className="space-y-6">
           {/* Card 1: Role Basic Information */}
-          <div className="p-6 border border-border bg-surface rounded-sm space-y-4 shadow-xs">
-            <div className="border-b border-border pb-2.5 flex items-center justify-between">
+          <div className="p-6 border border-border/80 bg-surface rounded-2xl space-y-4 shadow-xs">
+            <div className="border-b border-border/70 pb-2.5 flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-bold text-text-primary">Role Name Details</h2>
                 <p className="text-xs text-text-secondary mt-0.5">
@@ -337,21 +337,21 @@ export function RolesManagementView() {
                 value={roleName}
                 onChange={(e) => setRoleName(e.target.value)}
                 placeholder="e.g. Branch HR Coordinator, IT Support Lead, Senior Analyst"
-                className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                className="w-full p-2.5 px-3.5 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all"
               />
             </div>
           </div>
 
           {/* Card 2: Permissions Matrix Selection */}
-          <div className="p-6 border border-border bg-surface rounded-sm space-y-5 shadow-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-3">
+          <div className="p-6 border border-border/80 bg-surface rounded-2xl space-y-5 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/70 pb-3">
               <div>
                 <h2 className="text-sm font-bold text-text-primary flex items-center gap-2">
                   <Shield size={16} className="text-cherry dark:text-lime" />
                   Privileges & Permissions Matrix <span className="text-vibrantRed">*</span>
                 </h2>
                 <p className="text-xs text-text-secondary mt-0.5">
-                  Select which microservices and features users with this role can access (
+                  Select which features users with this role can access (
                   <span className="font-bold text-text-primary">
                     {selectedPermissionIds.length} of {permissions.length} selected
                   </span>
@@ -363,14 +363,14 @@ export function RolesManagementView() {
                 <button
                   type="button"
                   onClick={handleSelectAllPermissions}
-                  className="px-2.5 py-1 border border-border bg-bg hover:bg-surface rounded-sm text-[11px] font-semibold text-text-primary transition-colors"
+                  className="px-3 py-1 border border-border/80 bg-bg hover:bg-surface rounded-lg text-[11px] font-semibold text-text-primary transition-colors"
                 >
                   Select All
                 </button>
                 <button
                   type="button"
                   onClick={handleDeselectAllPermissions}
-                  className="px-2.5 py-1 border border-border bg-bg hover:bg-surface rounded-sm text-[11px] font-semibold text-text-secondary hover:text-text-primary transition-colors"
+                  className="px-3 py-1 border border-border/80 bg-bg hover:bg-surface rounded-lg text-[11px] font-semibold text-text-secondary hover:text-text-primary transition-colors"
                 >
                   Deselect All
                 </button>
@@ -394,10 +394,10 @@ export function RolesManagementView() {
                         <div
                           key={p.id}
                           onClick={() => handleTogglePermission(p.id)}
-                          className={`p-3.5 border rounded-sm cursor-pointer transition-all flex items-start gap-3 select-none ${
+                          className={`p-4 border rounded-2xl cursor-pointer transition-all flex items-start gap-3 select-none ${
                             isSelected
                               ? "border-cherry dark:border-lime bg-bg shadow-xs"
-                              : "border-border bg-input-bg/60 hover:bg-input-bg hover:border-border"
+                              : "border-border/80 bg-input-bg/60 hover:bg-input-bg hover:border-border"
                           }`}
                         >
                           <div className="pt-0.5 shrink-0">
@@ -417,7 +417,7 @@ export function RolesManagementView() {
                               >
                                 {p.meta.label}
                               </span>
-                              <code className="text-[10px] font-mono text-text-secondary px-1 py-0.5 border border-border bg-bg rounded-xs">
+                              <code className="text-[10px] font-mono text-text-secondary px-1.5 py-0.5 border border-border/70 bg-bg rounded-md">
                                 {p.name}
                               </code>
                             </div>
@@ -439,7 +439,7 @@ export function RolesManagementView() {
             <button
               type="button"
               onClick={handleBackToList}
-              className="px-5 py-2.5 border border-border bg-surface hover:bg-surface-hover rounded-sm text-xs font-semibold text-text-secondary transition-colors"
+              className="px-5 py-2.5 border border-border/80 bg-surface hover:bg-surface-hover rounded-xl text-xs font-semibold text-text-secondary transition-colors"
             >
               Cancel
             </button>
@@ -447,7 +447,7 @@ export function RolesManagementView() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all shadow-sm disabled:opacity-50 flex items-center gap-2"
+              className="px-6 py-2.5 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm disabled:opacity-50 flex items-center gap-2"
             >
               {isSubmitting ? (
                 <>
@@ -473,7 +473,7 @@ export function RolesManagementView() {
   return (
     <div className="space-y-6 w-full max-w-7xl mx-auto animate-fadeIn">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/70 pb-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-text-primary flex items-center gap-2">
             <ShieldCheck className="text-cherry dark:text-lime" size={26} /> Roles & Permissions (RBAC)
@@ -488,7 +488,7 @@ export function RolesManagementView() {
             type="button"
             onClick={loadData}
             title="Reload roles"
-            className="p-2 border border-border bg-surface hover:bg-surface-hover rounded-sm text-text-secondary transition-colors"
+            className="p-2 border border-border/80 bg-surface hover:bg-surface-hover rounded-xl text-text-secondary transition-colors"
           >
             <RefreshCw size={15} />
           </button>
@@ -497,7 +497,7 @@ export function RolesManagementView() {
             <button
               type="button"
               onClick={handleOpenCreateForm}
-              className="flex items-center gap-2 px-4 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm active:scale-95"
             >
               <Plus size={16} />
               <span>Create New Role</span>
@@ -508,7 +508,7 @@ export function RolesManagementView() {
 
       {/* Success Notification Banner */}
       {successMsg && (
-        <div className="p-3 border border-emerald-500/50 bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 rounded-sm text-xs flex items-center gap-2 animate-fadeIn">
+        <div className="p-3.5 border border-emerald-500/50 bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 rounded-xl text-xs flex items-center gap-2 animate-fadeIn">
           <CheckCircle2 size={16} className="shrink-0" />
           <span>{successMsg}</span>
         </div>
@@ -516,7 +516,7 @@ export function RolesManagementView() {
 
       {/* Error Notification Banner */}
       {errorMsg && (
-        <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2 animate-fadeIn">
+        <div className="p-3.5 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-xl text-xs flex items-center gap-2 animate-fadeIn">
           <AlertCircle size={16} className="shrink-0" />
           <span>{errorMsg}</span>
         </div>
@@ -526,7 +526,7 @@ export function RolesManagementView() {
       {isLoading ? (
         <LoadingSpinner message="Loading RBAC configuration..." />
       ) : roles.length === 0 ? (
-        <div className="p-12 border border-border bg-surface rounded-sm text-center space-y-3">
+        <div className="p-12 border border-border/80 bg-surface rounded-2xl text-center space-y-3">
           <Shield size={36} className="mx-auto text-text-secondary/50" />
           <div className="text-sm font-bold text-text-primary">No Roles Configured</div>
           <p className="text-xs text-text-secondary max-w-sm mx-auto">
@@ -542,7 +542,7 @@ export function RolesManagementView() {
             return (
               <div
                 key={r.id}
-                className="p-5 border border-border bg-surface rounded-sm hover:border-cherry/40 dark:hover:border-lime/40 transition-all shadow-2xs flex flex-col justify-between space-y-4 relative"
+                className="p-6 border border-border/80 bg-surface rounded-2xl hover:border-cherry/40 dark:hover:border-lime/40 transition-all shadow-xs flex flex-col justify-between space-y-4 relative hover:-translate-y-0.5"
               >
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-2">
@@ -550,7 +550,7 @@ export function RolesManagementView() {
                       <div className="font-bold text-text-primary text-base flex items-center gap-2">
                         <span>{r.name}</span>
                         {isSuperAdmin && (
-                          <span className="px-1.5 py-0.5 border border-cherry/40 dark:border-lime/40 bg-bg text-[10px] font-bold text-cherry dark:text-lime uppercase rounded-xs">
+                          <span className="px-2 py-0.5 border border-cherry/40 dark:border-lime/40 bg-bg text-[10px] font-bold text-cherry dark:text-lime uppercase rounded-full">
                             System Default
                           </span>
                         )}
@@ -567,7 +567,7 @@ export function RolesManagementView() {
                           type="button"
                           onClick={() => setOpenActionMenuId(isActionMenuOpen ? null : r.id)}
                           title="Manage Role"
-                          className={`p-1.5 rounded-sm border transition-colors ${
+                          className={`p-1.5 rounded-xl border transition-colors ${
                             isActionMenuOpen
                               ? "bg-surface border-cherry dark:border-lime text-cherry dark:text-lime"
                               : "border-border/60 hover:border-border bg-bg hover:bg-surface text-text-secondary hover:text-text-primary"
@@ -577,11 +577,11 @@ export function RolesManagementView() {
                         </button>
 
                         {isActionMenuOpen && (
-                          <div className="absolute right-0 top-9 z-50 w-36 bg-surface border border-border rounded-sm shadow-xl py-1 text-left animate-scaleIn select-none">
+                          <div className="absolute right-0 top-10 z-50 w-40 bg-surface border border-border/80 rounded-2xl shadow-xl py-1.5 text-left animate-scaleIn select-none">
                             <button
                               type="button"
                               onClick={() => handleOpenEditForm(r)}
-                              className="w-full px-3 py-2 text-xs font-medium text-text-primary hover:bg-surface-hover flex items-center gap-2 transition-colors"
+                              className="w-full px-3.5 py-2 text-xs font-medium text-text-primary hover:bg-surface-hover flex items-center gap-2 transition-colors"
                             >
                               <Edit2 size={13} className="text-cherry dark:text-lime" />
                               <span>Edit Role</span>
@@ -591,7 +591,7 @@ export function RolesManagementView() {
                               <button
                                 type="button"
                                 onClick={() => handleDeleteRole(r.id, r.name)}
-                                className="w-full px-3 py-2 text-xs font-medium text-vibrantRed hover:bg-vibrantRed/10 flex items-center gap-2 transition-colors border-t border-border/40"
+                                className="w-full px-3.5 py-2 text-xs font-medium text-vibrantRed hover:bg-vibrantRed/10 flex items-center gap-2 transition-colors border-t border-border/40"
                               >
                                 <Trash2 size={13} />
                                 <span>Delete Role</span>
@@ -605,7 +605,7 @@ export function RolesManagementView() {
                 </div>
 
                 {/* Assigned Permission Badges */}
-                <div className="pt-3 border-t border-border space-y-2">
+                <div className="pt-3 border-t border-border/70 space-y-2">
                   <div className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
                     Assigned Permissions:
                   </div>
@@ -614,7 +614,7 @@ export function RolesManagementView() {
                       r.permissions.map((p) => (
                         <span
                           key={p.id}
-                          className="px-2 py-0.5 border border-border bg-bg text-[11px] font-mono rounded-sm text-cherry dark:text-lime font-medium"
+                          className="px-2.5 py-0.5 border border-border/80 bg-bg text-[11px] font-mono rounded-full text-cherry dark:text-lime font-medium"
                         >
                           {p.name}
                         </span>

@@ -247,28 +247,34 @@ export function ChatView() {
 
       {/* Main Chat Workspace */}
       <div className="flex-1 flex flex-col justify-between overflow-hidden bg-bg">
-        {/* Header Ribbon (DeepSeek style) */}
-        <header className="px-4 sm:px-6 py-3 border-b border-border bg-surface flex items-center justify-between shrink-0 shadow-xs">
+        {/* Header Ribbon */}
+        <header className="px-4 sm:px-6 py-3.5 border-b border-border/70 bg-surface/90 backdrop-blur-md flex items-center justify-between shrink-0 shadow-xs">
           <div className="flex items-center gap-3 overflow-hidden">
             {isChatSidebarCollapsed && (
               <button
                 type="button"
                 onClick={toggleChatSidebar}
-                className="p-1.5 border border-border bg-bg hover:bg-surface-hover rounded-sm text-text-secondary hover:text-text-primary transition-colors mr-1"
+                className="p-1.5 border border-border/80 bg-bg hover:bg-surface-hover rounded-xl text-text-secondary hover:text-text-primary transition-colors mr-1"
                 title="Open Chat History"
               >
                 <PanelLeft size={16} />
               </button>
             )}
 
-            <div className="w-8 h-8 rounded-sm bg-surface border border-border flex items-center justify-center font-bold shrink-0 shadow-2xs">
-              <CrocodileLogo size={22} />
+            <div className="w-9 h-9 rounded-xl bg-surface border border-border/80 flex items-center justify-center font-bold shrink-0 shadow-2xs">
+              <CrocodileLogo size={24} />
             </div>
 
             <div className="overflow-hidden">
-              <h2 className="text-sm font-bold text-text-primary truncate">
-                {activeConvObj?.title || "New HR Policy Inquiry"}
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-bold text-text-primary truncate">
+                  {activeConvObj?.title || "HR Assistant"}
+                </h2>
+                <span className="inline-flex items-center gap-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Online & Ready</span>
+                </span>
+              </div>
               <div className="flex items-center gap-3 text-[11px] text-text-secondary mt-0.5">
                 <span className="flex items-center gap-1 font-medium">
                   <MapPin size={11} className="text-cherry dark:text-lime" />
@@ -283,15 +289,19 @@ export function ChatView() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="hidden sm:inline-flex px-2 py-0.5 border border-border bg-bg text-[10px] uppercase font-bold text-cherry dark:text-lime rounded-sm font-mono">
-              Semantic Cache + Cross-Encoder
-            </span>
+            <button
+              type="button"
+              onClick={handleNewChat}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 border border-border/80 bg-bg hover:bg-surface text-xs font-semibold rounded-xl text-text-primary transition-colors shadow-2xs"
+            >
+              <span>+ New Session</span>
+            </button>
           </div>
         </header>
 
         {/* Error Notification Banner */}
         {chatError && (
-          <div className="p-3 mx-4 sm:mx-6 mt-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center justify-between animate-fadeIn">
+          <div className="p-3 mx-4 sm:mx-6 mt-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-xl text-xs flex items-center justify-between animate-fadeIn">
             <div className="flex items-center gap-2">
               <AlertCircle size={15} className="shrink-0" />
               <span>{chatError}</span>
@@ -301,7 +311,7 @@ export function ChatView() {
                 <button
                   type="button"
                   onClick={logout}
-                  className="px-2.5 py-1 bg-vibrantRed text-white font-bold text-[11px] rounded-sm hover:opacity-90 transition-opacity"
+                  className="px-3 py-1 bg-vibrantRed text-white font-bold text-[11px] rounded-lg hover:opacity-90 transition-opacity"
                 >
                   Sign In Again
                 </button>
@@ -309,7 +319,7 @@ export function ChatView() {
                 <button
                   type="button"
                   onClick={loadConversations}
-                  className="p-1 hover:bg-vibrantRed/20 rounded-sm"
+                  className="p-1 hover:bg-vibrantRed/20 rounded-lg"
                   title="Retry connection"
                 >
                   <RefreshCw size={13} />
@@ -323,23 +333,23 @@ export function ChatView() {
         <div className="flex-1 overflow-y-auto">
           {messages.length === 0 && !isStreaming && !isThinking ? (
             <div className="h-full flex flex-col items-center justify-center p-6 text-center max-w-2xl mx-auto space-y-6 animate-fadeIn">
-              {/* Crocodile Mascot Welcome Emblem */}
+              {/* Mascot Welcome Emblem */}
               <div className="relative flex flex-col items-center">
-                <div className="p-4 rounded-2xl bg-surface border border-border/80 shadow-md transition-transform hover:scale-105">
-                  <CrocodileLogo size={56} />
+                <div className="p-5 rounded-3xl bg-surface border border-border/80 shadow-md transition-transform hover:scale-105">
+                  <CrocodileLogo size={60} />
                 </div>
-                <div className="mt-4 space-y-1">
-                  <h3 className="text-xl font-extrabold tracking-tight text-text-primary">
-                    How can HR RAG Assistant help you today?
+                <div className="mt-4 space-y-1.5">
+                  <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-text-primary">
+                    How can I help you today?
                   </h3>
                   <p className="text-xs text-text-secondary max-w-md mx-auto leading-relaxed">
-                    Instantly query official company handbooks, leave policies, health insurance coverage, and branch guidelines with strict privacy protection.
+                    Ask any question about company policies, leave days, health & dental coverage, or guidelines in English, Roman Urdu, or Urdu.
                   </p>
                 </div>
               </div>
 
               {/* Sample Quick-Prompt Suggestion Chips */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full pt-2">
                 {[
                   {
                     title: "Medical & Dental Coverage",
@@ -362,7 +372,7 @@ export function ChatView() {
                     key={i}
                     type="button"
                     onClick={() => handleSendMessage({ message: sample.desc })}
-                    className="p-3 text-left border border-border bg-surface hover:border-cherry/60 dark:hover:border-lime/60 rounded-sm transition-all hover:bg-surface-hover shadow-2xs group flex flex-col justify-between"
+                    className="p-4 text-left border border-border/80 bg-surface hover:border-cherry/60 dark:hover:border-lime/60 rounded-2xl transition-all hover:bg-surface-hover shadow-xs group flex flex-col justify-between hover:-translate-y-0.5"
                   >
                     <div className="text-xs font-bold text-text-primary group-hover:text-cherry dark:group-hover:text-lime transition-colors">
                       {sample.title}

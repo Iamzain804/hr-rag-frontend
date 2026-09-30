@@ -61,30 +61,30 @@ const MarkdownComponents = {
     <li className="text-sm leading-relaxed" {...props} />
   ),
   table: ({ node, ...props }) => (
-    <div className="overflow-x-auto my-3 border border-border rounded-sm">
-      <table className="min-w-full divide-y divide-border text-xs" {...props} />
+    <div className="overflow-x-auto my-3 border border-border/80 rounded-xl shadow-xs">
+      <table className="min-w-full divide-y divide-border/80 text-xs" {...props} />
     </div>
   ),
   thead: ({ node, ...props }) => (
-    <thead className="bg-bg/80 text-text-primary font-bold uppercase tracking-wider" {...props} />
+    <thead className="bg-bg/90 text-text-primary font-bold uppercase tracking-wider text-[11px]" {...props} />
   ),
   tbody: ({ node, ...props }) => (
-    <tbody className="divide-y divide-border/60 bg-surface/50" {...props} />
+    <tbody className="divide-y divide-border/60 bg-surface/60" {...props} />
   ),
   tr: ({ node, ...props }) => (
     <tr className="hover:bg-bg/40 transition-colors" {...props} />
   ),
   th: ({ node, ...props }) => (
-    <th className="px-3 py-2 text-left font-bold border-r last:border-r-0 border-border" {...props} />
+    <th className="px-3.5 py-2.5 text-left font-bold border-r last:border-r-0 border-border/70" {...props} />
   ),
   td: ({ node, ...props }) => (
-    <td className="px-3 py-2 text-text-secondary border-r last:border-r-0 border-border/60 font-medium" {...props} />
+    <td className="px-3.5 py-2.5 text-text-secondary border-r last:border-r-0 border-border/50 font-medium" {...props} />
   ),
   code: ({ node, inline, ...props }) =>
     inline ? (
-      <code className="px-1 py-0.5 mx-0.5 bg-bg border border-border rounded-sm font-mono text-xs text-cherry dark:text-lime" {...props} />
+      <code className="px-1.5 py-0.5 mx-0.5 bg-bg border border-border/80 rounded-md font-mono text-xs text-cherry dark:text-lime" {...props} />
     ) : (
-      <pre className="p-2.5 my-2 bg-bg border border-border rounded-sm overflow-x-auto font-mono text-xs text-text-primary">
+      <pre className="p-3 my-2 bg-bg border border-border/80 rounded-xl overflow-x-auto font-mono text-xs text-text-primary">
         <code {...props} />
       </pre>
     ),
@@ -129,19 +129,19 @@ export function ChatMessage({ message, isStreaming = false, onFlagToHR }) {
       className={`py-4 px-4 sm:px-6 transition-colors ${
         isUser
           ? "bg-bg/40 border-b border-border/40"
-          : "bg-surface border-b border-border"
+          : "bg-surface/80 border-b border-border/70"
       }`}
       dir={isUrdu ? "rtl" : "ltr"}
     >
-      <div className="max-w-3xl mx-auto flex gap-4">
+      <div className="max-w-3xl mx-auto flex gap-3.5 sm:gap-4">
         {/* Avatar */}
-        <div className="shrink-0 mt-1">
+        <div className="shrink-0 mt-0.5">
           {isUser ? (
-            <div className="w-8 h-8 rounded-sm bg-tone-2 border border-border flex items-center justify-center text-text-secondary">
-              <User size={16} />
+            <div className="w-8 h-8 rounded-full bg-cherry/10 dark:bg-lime/10 border border-cherry/30 dark:border-lime/30 flex items-center justify-center text-cherry dark:text-lime shadow-2xs">
+              <User size={15} />
             </div>
           ) : (
-            <div className="w-8 h-8 rounded-sm bg-surface border border-border flex items-center justify-center shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-surface border border-border/80 flex items-center justify-center shadow-xs">
               <CrocodileLogo size={22} />
             </div>
           )}
@@ -157,14 +157,14 @@ export function ChatMessage({ message, isStreaming = false, onFlagToHR }) {
               </span>
 
               {!isUser && hasUnverifiedContext && (
-                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider border border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-400 rounded-sm">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider border border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-400 rounded-full">
                   <AlertTriangle size={10} />
-                  Includes Employee Attachment Context
+                  Includes Employee Context
                 </span>
               )}
 
               {!isUser && !hasUnverifiedContext && !isFallbackMessage && (
-                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider border border-border bg-bg text-cherry dark:text-lime rounded-sm">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-full">
                   <CheckCircle2 size={10} />
                   Verified Company Policy
                 </span>
@@ -177,33 +177,30 @@ export function ChatMessage({ message, isStreaming = false, onFlagToHR }) {
                 type="button"
                 onClick={copyToClipboard}
                 title="Copy response"
-                className="text-text-secondary hover:text-text-primary p-1 rounded-sm hover:bg-bg transition-colors"
+                className="text-text-secondary hover:text-text-primary p-1 rounded-lg hover:bg-bg transition-colors"
               >
                 {copied ? <Check size={14} className="text-cherry dark:text-lime" /> : <Copy size={14} />}
               </button>
             )}
           </div>
 
-          {/* Ephemeral Attachment Preview (if User message has attachment) */}
+          {/* Attachment Preview */}
           {isUser && message.has_attachment && (
-            <div className="p-2.5 border border-border bg-bg rounded-sm text-xs space-y-1 my-2" dir="ltr">
+            <div className="p-3 border border-border/80 bg-bg rounded-xl text-xs space-y-1 my-2" dir="ltr">
               <div className="flex items-center gap-1.5 font-semibold text-cherry dark:text-lime">
                 <Paperclip size={13} />
-                <span>Attachment Attached (In-Memory)</span>
+                <span>Temporary Attachment Attached</span>
               </div>
               {message.attachment_text && (
                 <p className="text-text-secondary line-clamp-2 italic font-mono text-[11px]">
                   "{message.attachment_text.slice(0, 150)}..."
                 </p>
               )}
-              <div className="text-[10px] text-text-secondary">
-                ⚡ Used only to answer this question — not saved to company records
-              </div>
             </div>
           )}
 
           {/* Main Markdown Formatted Text */}
-          <div className="text-text-primary break-words">
+          <div className="text-text-primary break-words leading-relaxed text-sm">
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={MarkdownComponents}>
               {cleanedContent}
             </ReactMarkdown>
@@ -211,12 +208,12 @@ export function ChatMessage({ message, isStreaming = false, onFlagToHR }) {
 
           {/* Streaming Cursor */}
           {isStreaming && (
-            <span className="inline-block w-2 h-4 bg-cherry dark:bg-lime animate-pulse ml-0.5 align-middle" />
+            <span className="inline-block w-2 h-4 bg-cherry dark:bg-lime animate-pulse ml-0.5 align-middle rounded-xs" />
           )}
 
           {/* Fallback Question Action Button (Flag to HR) */}
           {!isUser && isFallbackMessage && !isStreaming && (
-            <div className="mt-3 pt-3 border-t border-border flex items-center justify-between" dir="ltr">
+            <div className="mt-3 pt-3 border-t border-border/70 flex items-center justify-between" dir="ltr">
               <span className="text-xs text-text-secondary">
                 Policy document missing? Escalate directly:
               </span>
@@ -224,7 +221,7 @@ export function ChatMessage({ message, isStreaming = false, onFlagToHR }) {
                 type="button"
                 onClick={handleFlag}
                 disabled={flagged}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-sm border border-border bg-btn-bg text-btn-text hover:bg-btn-hover disabled:opacity-50 transition-all shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border border-border/80 bg-btn-bg text-btn-text hover:bg-btn-hover disabled:opacity-50 transition-all shadow-sm"
               >
                 <Flag size={12} />
                 {flagged ? "Flagged to HR Team" : "Flag to HR Department"}

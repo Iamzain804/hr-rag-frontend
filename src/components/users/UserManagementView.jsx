@@ -294,10 +294,10 @@ export function UserManagementView() {
   return (
     <div className="space-y-6 w-full max-w-7xl mx-auto animate-fadeIn">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/70 pb-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-text-primary flex items-center gap-2">
-            <Users className="text-cherry dark:text-lime" size={26} /> User Management
+            <Users className="text-cherry dark:text-lime" size={26} /> Team Directory
           </h1>
           <p className="text-sm text-text-secondary mt-1">
             Manage company employees, assign roles, configure permissions, and update accounts
@@ -309,7 +309,7 @@ export function UserManagementView() {
             type="button"
             onClick={loadAllData}
             title="Reload user list"
-            className="p-2 border border-border bg-surface hover:bg-surface-hover rounded-sm text-text-secondary transition-colors"
+            className="p-2 border border-border/80 bg-surface hover:bg-surface-hover rounded-xl text-text-secondary transition-colors"
           >
             <RefreshCw size={15} />
           </button>
@@ -318,10 +318,10 @@ export function UserManagementView() {
             <button
               type="button"
               onClick={handleOpenAddModal}
-              className="flex items-center gap-2 px-4 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm active:scale-95"
             >
               <UserPlus size={16} />
-              <span>Add User</span>
+              <span>Add Member</span>
             </button>
           )}
         </div>
@@ -329,7 +329,7 @@ export function UserManagementView() {
 
       {/* Success Notification Banner */}
       {successMsg && (
-        <div className="p-3 border border-emerald-500/50 bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 rounded-sm text-xs flex items-center gap-2 animate-fadeIn">
+        <div className="p-3.5 border border-emerald-500/50 bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 rounded-xl text-xs flex items-center gap-2 animate-fadeIn">
           <CheckCircle2 size={16} className="shrink-0" />
           <span>{successMsg}</span>
         </div>
@@ -337,7 +337,7 @@ export function UserManagementView() {
 
       {/* Error Notification Banner */}
       {errorMsg && (
-        <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2 animate-fadeIn">
+        <div className="p-3.5 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-xl text-xs flex items-center gap-2 animate-fadeIn">
           <AlertCircle size={16} className="shrink-0" />
           <span>{errorMsg}</span>
         </div>
@@ -352,12 +352,12 @@ export function UserManagementView() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by name, email, or role..."
-            className="w-full pl-9 pr-3 py-2 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+            className="w-full pl-9 pr-3 py-2 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all"
           />
         </div>
 
         <div className="text-xs text-text-secondary">
-          Showing <span className="font-bold text-text-primary">{filteredUsers.length}</span> of {users.length} active users
+          Showing <span className="font-bold text-text-primary">{filteredUsers.length}</span> of {users.length} members
         </div>
       </div>
 
@@ -365,52 +365,52 @@ export function UserManagementView() {
       {isLoading ? (
         <LoadingSpinner message="Loading user directory..." />
       ) : filteredUsers.length === 0 ? (
-        <div className="p-12 border border-border bg-surface rounded-sm text-center space-y-3">
+        <div className="p-12 border border-border/80 bg-surface rounded-2xl text-center space-y-3">
           <Users size={36} className="mx-auto text-text-secondary/50" />
           <div className="text-sm font-bold text-text-primary">No Users Found</div>
           <p className="text-xs text-text-secondary max-w-sm mx-auto">
             {searchQuery
               ? "No user accounts match your search filter."
-              : "No user accounts exist in the directory. Click 'Add User' to register your first team member."}
+              : "No user accounts exist in the directory. Click 'Add Member' to register your first team member."}
           </p>
         </div>
       ) : (
-        <div className="border border-border bg-surface rounded-sm overflow-visible shadow-xs">
+        <div className="border border-border/80 bg-surface rounded-2xl overflow-visible shadow-xs">
           <table className="w-full text-left text-xs min-w-[750px]">
-            <thead className="border-b border-border bg-bg uppercase tracking-wider text-text-secondary font-bold text-[11px]">
+            <thead className="border-b border-border/70 bg-bg/70 uppercase tracking-wider text-text-secondary font-bold text-[11px]">
               <tr>
-                <th className="p-3.5">Employee Name</th>
-                <th className="p-3.5">Email Address</th>
-                <th className="p-3.5">Assigned Role</th>
-                <th className="p-3.5">Branch</th>
-                <th className="p-3.5">Department</th>
-                <th className="p-3.5">Status</th>
-                {canManageUsers && <th className="p-3.5 text-right">Actions</th>}
+                <th className="p-4">Employee Name</th>
+                <th className="p-4">Email Address</th>
+                <th className="p-4">Assigned Role</th>
+                <th className="p-4">Branch</th>
+                <th className="p-4">Department</th>
+                <th className="p-4">Status</th>
+                {canManageUsers && <th className="p-4 text-right">Actions</th>}
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-border/60">
               {filteredUsers.map((u) => {
                 const userBranch = branches.find((b) => b.id === u.branch_id);
                 const userDept = departments.find((d) => d.id === u.department_id);
                 const isActionMenuOpen = openActionMenuId === u.id;
 
                 return (
-                  <tr key={u.id} className="hover:bg-bg/50 transition-colors">
-                    <td className="p-3.5 font-semibold text-text-primary flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-cherry/10 dark:bg-lime/10 border border-cherry/30 dark:border-lime/30 text-cherry dark:text-lime font-bold flex items-center justify-center text-xs shrink-0">
+                  <tr key={u.id} className="hover:bg-bg/40 transition-colors">
+                    <td className="p-4 font-semibold text-text-primary flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-cherry/10 dark:bg-lime/10 border border-cherry/30 dark:border-lime/30 text-cherry dark:text-lime font-bold flex items-center justify-center text-xs shrink-0 shadow-2xs">
                         {(u.first_name?.[0] || "U").toUpperCase()}
                       </div>
                       <span>
                         {u.first_name} {u.last_name || ""}
                       </span>
                     </td>
-                    <td className="p-3.5 font-mono text-text-secondary">{u.email}</td>
-                    <td className="p-3.5">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 border border-border bg-bg rounded-sm text-cherry dark:text-lime font-semibold text-[11px]">
+                    <td className="p-4 font-mono text-text-secondary">{u.email}</td>
+                    <td className="p-4">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 border border-border/80 bg-bg rounded-full text-cherry dark:text-lime font-semibold text-[11px]">
                         <Shield size={11} /> {u.role_name || `Role #${u.role_id}`}
                       </span>
                     </td>
-                    <td className="p-3.5">
+                    <td className="p-4">
                       {userBranch ? (
                         <span className="inline-flex items-center gap-1 text-text-primary">
                           <Building2 size={12} className="text-text-secondary" /> {userBranch.name}
@@ -419,7 +419,7 @@ export function UserManagementView() {
                         <span className="text-text-secondary italic">Company-Wide</span>
                       )}
                     </td>
-                    <td className="p-3.5">
+                    <td className="p-4">
                       {userDept ? (
                         <span className="inline-flex items-center gap-1 text-text-primary">
                           <FolderTree size={12} className="text-text-secondary" /> {userDept.name}
@@ -428,12 +428,12 @@ export function UserManagementView() {
                         <span className="text-text-secondary italic">General</span>
                       )}
                     </td>
-                    <td className="p-3.5">
+                    <td className="p-4">
                       <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 border rounded-sm text-[11px] font-semibold ${
+                        className={`inline-flex items-center gap-1.5 px-3 py-0.5 border rounded-full text-[11px] font-semibold ${
                           u.is_active
                             ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30"
-                            : "bg-bg text-text-secondary border-border"
+                            : "bg-bg text-text-secondary border-border/80"
                         }`}
                       >
                         <span
@@ -447,13 +447,13 @@ export function UserManagementView() {
 
                     {/* 3-DOT VERTICAL ACTION DROPDOWN */}
                     {canManageUsers && (
-                      <td className="p-3.5 text-right relative">
+                      <td className="p-4 text-right relative">
                         <div className="inline-block text-left" ref={isActionMenuOpen ? menuRef : null}>
                           <button
                             type="button"
                             onClick={() => setOpenActionMenuId(isActionMenuOpen ? null : u.id)}
-                            title="Manage User Actions"
-                            className={`p-1.5 rounded-sm border transition-colors ${
+                            title="Manage Member"
+                            className={`p-1.5 rounded-xl border transition-colors ${
                               isActionMenuOpen
                                 ? "bg-surface border-cherry dark:border-lime text-cherry dark:text-lime"
                                 : "border-border/60 hover:border-border bg-bg hover:bg-surface text-text-secondary hover:text-text-primary"
@@ -464,12 +464,12 @@ export function UserManagementView() {
 
                           {/* Floating Dropdown Menu */}
                           {isActionMenuOpen && (
-                            <div className="absolute right-3.5 top-11 z-50 w-44 bg-surface border border-border rounded-sm shadow-xl py-1 text-left animate-scaleIn select-none">
+                            <div className="absolute right-4 top-12 z-50 w-48 bg-surface border border-border/80 rounded-2xl shadow-xl py-1.5 text-left animate-scaleIn select-none">
                               {/* Option 1: Edit User */}
                               <button
                                 type="button"
                                 onClick={() => handleOpenEditModal(u)}
-                                className="w-full px-3 py-2 text-xs font-medium text-text-primary hover:bg-surface-hover flex items-center gap-2 transition-colors"
+                                className="w-full px-3.5 py-2 text-xs font-medium text-text-primary hover:bg-surface-hover flex items-center gap-2 transition-colors"
                               >
                                 <Edit2 size={13} className="text-cherry dark:text-lime" />
                                 <span>Edit Details</span>
@@ -479,7 +479,7 @@ export function UserManagementView() {
                               <button
                                 type="button"
                                 onClick={() => handleToggleStatus(u)}
-                                className="w-full px-3 py-2 text-xs font-medium text-text-primary hover:bg-surface-hover flex items-center gap-2 transition-colors border-t border-border/40"
+                                className="w-full px-3.5 py-2 text-xs font-medium text-text-primary hover:bg-surface-hover flex items-center gap-2 transition-colors border-t border-border/40"
                               >
                                 {u.is_active ? (
                                   <>
@@ -498,10 +498,10 @@ export function UserManagementView() {
                               <button
                                 type="button"
                                 onClick={() => handleDeleteUser(u.id, u.email)}
-                                className="w-full px-3 py-2 text-xs font-medium text-vibrantRed hover:bg-vibrantRed/10 flex items-center gap-2 transition-colors border-t border-border/40"
+                                className="w-full px-3.5 py-2 text-xs font-medium text-vibrantRed hover:bg-vibrantRed/10 flex items-center gap-2 transition-colors border-t border-border/40"
                               >
                                 <Trash2 size={13} />
-                                <span>Delete User</span>
+                                <span>Delete Account</span>
                               </button>
                             </div>
                           )}
@@ -519,18 +519,18 @@ export function UserManagementView() {
       {/* ================= EDIT USER MODAL POPUP ================= */}
       {isEditModalOpen && editingUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-fadeIn">
-          <div className="border border-border bg-surface rounded-sm w-full max-w-lg shadow-2xl overflow-hidden animate-scaleIn">
-            <div className="flex items-center justify-between p-4 border-b border-border bg-bg/50">
+          <div className="border border-border/80 bg-surface rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-scaleIn">
+            <div className="flex items-center justify-between p-5 border-b border-border/70 bg-bg/50">
               <div className="flex items-center gap-2">
                 <Edit2 size={18} className="text-cherry dark:text-lime" />
                 <h3 className="font-bold text-sm text-text-primary">
-                  Edit User: {editingUser.email}
+                  Edit Member: {editingUser.email}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={handleCloseEditModal}
-                className="p-1 text-text-secondary hover:text-text-primary rounded-sm transition-colors"
+                className="p-1.5 text-text-secondary hover:text-text-primary rounded-lg hover:bg-bg transition-colors"
               >
                 <X size={16} />
               </button>
@@ -538,7 +538,7 @@ export function UserManagementView() {
 
             <form onSubmit={handleUpdateUser} className="p-6 space-y-4">
               {editModalError && (
-                <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2">
+                <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-xl text-xs flex items-center gap-2">
                   <AlertCircle size={15} className="shrink-0" />
                   <span>{editModalError}</span>
                 </div>
@@ -547,7 +547,7 @@ export function UserManagementView() {
               {/* Name Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-text-primary mb-1">
+                  <label className="block text-xs font-bold text-text-primary mb-1.5">
                     First Name <span className="text-vibrantRed">*</span>
                   </label>
                   <input
@@ -555,31 +555,31 @@ export function UserManagementView() {
                     required
                     value={editFirstName}
                     onChange={(e) => setEditFirstName(e.target.value)}
-                    className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                    className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-text-primary mb-1">
+                  <label className="block text-xs font-bold text-text-primary mb-1.5">
                     Last Name
                   </label>
                   <input
                     type="text"
                     value={editLastName}
                     onChange={(e) => setEditLastName(e.target.value)}
-                    className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                    className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all"
                   />
                 </div>
               </div>
 
               {/* Role Selection */}
               <div>
-                <label className="block text-xs font-bold text-text-primary mb-1">
+                <label className="block text-xs font-bold text-text-primary mb-1.5">
                   Assigned Role <span className="text-vibrantRed">*</span>
                 </label>
                 <select
                   value={editRoleId}
                   onChange={(e) => setEditRoleId(e.target.value)}
-                  className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                  className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all cursor-pointer"
                 >
                   {roles.map((r) => (
                     <option key={r.id} value={r.id}>
@@ -592,13 +592,13 @@ export function UserManagementView() {
               {/* Branch & Dept */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-text-primary mb-1">
+                  <label className="block text-xs font-bold text-text-primary mb-1.5">
                     Assigned Branch
                   </label>
                   <select
                     value={editBranchId}
                     onChange={(e) => setEditBranchId(e.target.value)}
-                    className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                    className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all cursor-pointer"
                   >
                     <option value="">Company-Wide / Universal</option>
                     {branches.map((b) => (
@@ -610,13 +610,13 @@ export function UserManagementView() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-text-primary mb-1">
+                  <label className="block text-xs font-bold text-text-primary mb-1.5">
                     Assigned Department
                   </label>
                   <select
                     value={editDeptId}
                     onChange={(e) => setEditDeptId(e.target.value)}
-                    className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                    className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all cursor-pointer"
                   >
                     <option value="">General / All</option>
                     {departments.map((d) => (
@@ -629,13 +629,13 @@ export function UserManagementView() {
               </div>
 
               {/* Active Status Toggle */}
-              <div className="pt-2 border-t border-border">
+              <div className="pt-2 border-t border-border/70">
                 <label className="flex items-center gap-2 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={editIsActive}
                     onChange={(e) => setEditIsActive(e.target.checked)}
-                    className="rounded-sm border-border text-cherry dark:text-lime focus:ring-0"
+                    className="rounded-md border-border text-cherry dark:text-lime focus:ring-0"
                   />
                   <span className="text-xs text-text-primary font-semibold">
                     Account is Active and Allowed to Login
@@ -644,18 +644,18 @@ export function UserManagementView() {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-border flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-border/70 flex items-center justify-end gap-2.5">
                 <button
                   type="button"
                   onClick={handleCloseEditModal}
-                  className="px-4 py-2 border border-border bg-surface hover:bg-surface-hover rounded-sm text-xs font-semibold text-text-secondary transition-colors"
+                  className="px-4 py-2 border border-border/80 bg-surface hover:bg-surface-hover rounded-xl text-xs font-semibold text-text-secondary transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isUpdating}
-                  className="px-5 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all shadow-sm disabled:opacity-50 flex items-center gap-2"
+                  className="px-5 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm disabled:opacity-50 flex items-center gap-2"
                 >
                   {isUpdating ? (
                     <>
@@ -675,18 +675,18 @@ export function UserManagementView() {
       {/* ================= ADD USER MODAL POPUP ================= */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-fadeIn">
-          <div className="border border-border bg-surface rounded-sm w-full max-w-lg shadow-2xl overflow-hidden animate-scaleIn">
-            <div className="flex items-center justify-between p-4 border-b border-border bg-bg/50">
+          <div className="border border-border/80 bg-surface rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-scaleIn">
+            <div className="flex items-center justify-between p-5 border-b border-border/70 bg-bg/50">
               <div className="flex items-center gap-2">
                 <UserPlus size={18} className="text-cherry dark:text-lime" />
                 <h3 className="font-bold text-sm text-text-primary">
-                  {createdUserData ? "User Account Created" : "Add New User"}
+                  {createdUserData ? "User Account Created" : "Add Team Member"}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={handleCloseAddModal}
-                className="p-1 text-text-secondary hover:text-text-primary rounded-sm transition-colors"
+                className="p-1.5 text-text-secondary hover:text-text-primary rounded-lg hover:bg-bg transition-colors"
               >
                 <X size={16} />
               </button>
@@ -695,7 +695,7 @@ export function UserManagementView() {
             <div className="p-6 space-y-4">
               {createdUserData ? (
                 <div className="space-y-4">
-                  <div className="p-4 border border-emerald-500/50 bg-emerald-500/10 rounded-sm space-y-2">
+                  <div className="p-4 border border-emerald-500/50 bg-emerald-500/10 rounded-xl space-y-2">
                     <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider">
                       <CheckCircle2 size={16} />
                       <span>Account Successfully Created</span>
@@ -706,15 +706,15 @@ export function UserManagementView() {
                     </p>
                   </div>
 
-                  <div className="p-4 border border-border bg-bg rounded-sm space-y-2">
+                  <div className="p-4 border border-border/80 bg-bg rounded-xl space-y-2">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-text-secondary flex items-center gap-1.5">
-                        <KeyRound size={13} className="text-cherry dark:text-lime" /> Temporary Generated Password:
+                        <KeyRound size={13} className="text-cherry dark:text-lime" /> Temporary Password:
                       </label>
                       <button
                         type="button"
                         onClick={() => handleCopyPassword(createdUserData.temporary_password)}
-                        className="flex items-center gap-1 px-2 py-1 border border-border hover:bg-surface rounded-sm text-[11px] font-semibold text-text-primary transition-colors"
+                        className="flex items-center gap-1 px-2.5 py-1 border border-border/80 hover:bg-surface rounded-lg text-[11px] font-semibold text-text-primary transition-colors"
                       >
                         {copiedPassword ? (
                           <>
@@ -729,15 +729,15 @@ export function UserManagementView() {
                         )}
                       </button>
                     </div>
-                    <div className="p-2.5 border border-border bg-input-bg rounded-sm font-mono text-sm font-bold text-cherry dark:text-lime tracking-wider break-all select-all">
+                    <div className="p-3 border border-border/80 bg-input-bg rounded-xl font-mono text-sm font-bold text-cherry dark:text-lime tracking-wider break-all select-all">
                       {createdUserData.temporary_password}
                     </div>
                     <p className="text-[11px] text-text-secondary">
-                      The user will be prompted to change this temporary password upon their first login.
+                      The user will be prompted to change this temporary password upon first login.
                     </p>
                   </div>
 
-                  <div className="p-3 border border-border bg-surface rounded-sm flex items-center gap-2.5 text-xs">
+                  <div className="p-3.5 border border-border/80 bg-surface rounded-xl flex items-center gap-2.5 text-xs">
                     <Send size={15} className="text-cherry dark:text-lime shrink-0" />
                     <span className="text-text-secondary">
                       {createdUserData.emailDispatched ? (
@@ -752,7 +752,7 @@ export function UserManagementView() {
                     <button
                       type="button"
                       onClick={handleCloseAddModal}
-                      className="px-6 py-2.5 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all"
+                      className="px-6 py-2.5 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm"
                     >
                       Done & Close
                     </button>
@@ -761,7 +761,7 @@ export function UserManagementView() {
               ) : (
                 <form onSubmit={handleCreateUser} className="space-y-4">
                   {modalError && (
-                    <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2">
+                    <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-xl text-xs flex items-center gap-2">
                       <AlertCircle size={15} className="shrink-0" />
                       <span>{modalError}</span>
                     </div>
@@ -769,7 +769,7 @@ export function UserManagementView() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-text-primary mb-1">
+                      <label className="block text-xs font-bold text-text-primary mb-1.5">
                         First Name <span className="text-vibrantRed">*</span>
                       </label>
                       <input
@@ -778,11 +778,11 @@ export function UserManagementView() {
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         placeholder="e.g. Sarah"
-                        className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                        className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-text-primary mb-1">
+                      <label className="block text-xs font-bold text-text-primary mb-1.5">
                         Last Name
                       </label>
                       <input
@@ -790,13 +790,13 @@ export function UserManagementView() {
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         placeholder="e.g. Khan"
-                        className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                        className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-text-primary mb-1">
+                    <label className="block text-xs font-bold text-text-primary mb-1.5">
                       Email Address <span className="text-vibrantRed">*</span>
                     </label>
                     <div className="relative">
@@ -807,19 +807,19 @@ export function UserManagementView() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="e.g. sarah.khan@techcorp.com"
-                        className="w-full pl-9 pr-3 py-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                        className="w-full pl-9 pr-3 py-2.5 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-text-primary mb-1">
+                    <label className="block text-xs font-bold text-text-primary mb-1.5">
                       Assign Role <span className="text-vibrantRed">*</span>
                     </label>
                     <select
                       value={roleId}
                       onChange={(e) => setRoleId(e.target.value)}
-                      className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                      className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all cursor-pointer"
                     >
                       {roles.map((r) => (
                         <option key={r.id} value={r.id}>
@@ -831,13 +831,13 @@ export function UserManagementView() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-text-primary mb-1">
+                      <label className="block text-xs font-bold text-text-primary mb-1.5">
                         Assigned Branch
                       </label>
                       <select
                         value={branchId}
                         onChange={(e) => setBranchId(e.target.value)}
-                        className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                        className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all cursor-pointer"
                       >
                         <option value="">Company-Wide / Universal</option>
                         {branches.map((b) => (
@@ -849,13 +849,13 @@ export function UserManagementView() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-text-primary mb-1">
+                      <label className="block text-xs font-bold text-text-primary mb-1.5">
                         Assigned Department
                       </label>
                       <select
                         value={deptId}
                         onChange={(e) => setDeptId(e.target.value)}
-                        className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                        className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all cursor-pointer"
                       >
                         <option value="">General / All</option>
                         {departments.map((d) => (
@@ -867,13 +867,13 @@ export function UserManagementView() {
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-border">
+                  <div className="pt-2 border-t border-border/70">
                     <label className="flex items-center gap-2 cursor-pointer select-none">
                       <input
                         type="checkbox"
                         checked={sendNotificationEmail}
                         onChange={(e) => setSendNotificationEmail(e.target.checked)}
-                        className="rounded-sm border-border text-cherry dark:text-lime focus:ring-0"
+                        className="rounded-md border-border text-cherry dark:text-lime focus:ring-0"
                       />
                       <span className="text-xs text-text-secondary font-medium">
                         Dispatch temporary login credentials to user's email via SMTP notification
@@ -881,18 +881,18 @@ export function UserManagementView() {
                     </label>
                   </div>
 
-                  <div className="pt-3 border-t border-border flex items-center justify-end gap-2.5">
+                  <div className="pt-3 border-t border-border/70 flex items-center justify-end gap-2.5">
                     <button
                       type="button"
                       onClick={handleCloseAddModal}
-                      className="px-4 py-2 border border-border bg-surface hover:bg-surface-hover rounded-sm text-xs font-semibold text-text-secondary transition-colors"
+                      className="px-4 py-2 border border-border/80 bg-surface hover:bg-surface-hover rounded-xl text-xs font-semibold text-text-secondary transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-5 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all shadow-sm disabled:opacity-50 flex items-center gap-2"
+                      className="px-5 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm disabled:opacity-50 flex items-center gap-2"
                     >
                       {isSubmitting ? (
                         <>

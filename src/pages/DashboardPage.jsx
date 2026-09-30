@@ -9,6 +9,10 @@ import {
   Clock,
   MapPin,
   CheckCircle2,
+  Sparkles,
+  ArrowRight,
+  Shield,
+  UserCheck,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { Navbar } from "../components/Navbar";
@@ -74,92 +78,211 @@ export function DashboardPage() {
       <Navbar />
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Dynamic Navigation Sidebar */}
+        {/* Navigation Sidebar */}
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        {/* Main Content Area - Full width with responsive fluid padding */}
-        <main className={`flex-1 overflow-y-auto bg-bg transition-all duration-300 ${activeTab === "rag-chat" ? "p-0 overflow-hidden" : "p-4 sm:p-6 lg:p-8"}`}>
+        {/* Main Content Area */}
+        <main
+          className={`flex-1 overflow-y-auto bg-bg transition-all duration-300 ${
+            activeTab === "rag-chat" ? "p-0 overflow-hidden" : "p-4 sm:p-6 lg:p-8"
+          }`}
+        >
           {authError && <ErrorBanner message={authError} onRetry={refreshContext} />}
           {sectionError && <ErrorBanner message={sectionError} />}
 
-          {/* Tab: Overview (Default for all authenticated users) */}
+          {/* Tab: Overview (Welcoming & Human-Friendly) */}
           {activeTab === "overview" && (
-            <div className="space-y-6 w-full max-w-7xl mx-auto animate-fadeIn">
-              <div className="border-b border-border pb-4">
-                <h1 className="text-2xl font-bold tracking-tight text-text-primary">
-                  System Overview
-                </h1>
-                <p className="text-sm text-text-secondary mt-1">
-                  Contextual workspace anchored to your verified organizational identity
-                </p>
+            <div className="space-y-8 w-full max-w-7xl mx-auto animate-fadeIn">
+              {/* Top Hero Greeting Banner */}
+              <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-surface to-surface/80 border border-border/70 p-6 sm:p-8 shadow-sm">
+                <div className="relative z-10 max-w-2xl space-y-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cherry/20 dark:border-lime/20 bg-cherry/5 dark:bg-lime/5 text-cherry dark:text-lime text-xs font-semibold">
+                    <Sparkles size={13} />
+                    <span>Workspace Dashboard</span>
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-text-primary">
+                    Welcome back, {user?.first_name || "Team Member"} 👋
+                  </h1>
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    Your workplace assistant is ready. Ask policy questions, check medical & leave benefits, or manage team directories with ease.
+                  </p>
+                </div>
               </div>
 
-              {/* Context Summary Cards - Responsive Fluid Grid */}
+              {/* Quick Actions Shortcuts */}
+              <div className="space-y-3">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-text-secondary">
+                  Quick Actions
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("rag-chat")}
+                    className="p-4 rounded-2xl border border-border/80 bg-surface hover:border-cherry/50 dark:hover:border-lime/50 hover:bg-surface-hover transition-all text-left group shadow-xs hover:-translate-y-0.5 flex flex-col justify-between"
+                  >
+                    <div className="flex items-center justify-between w-full mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-cherry/10 dark:bg-lime/10 border border-cherry/20 dark:border-lime/20 flex items-center justify-center text-cherry dark:text-lime">
+                        <MessageSquare size={18} />
+                      </div>
+                      <ArrowRight size={15} className="text-text-secondary group-hover:text-cherry dark:group-hover:text-lime group-hover:translate-x-1 transition-all" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-sm text-text-primary group-hover:text-cherry dark:group-hover:text-lime transition-colors">
+                        Ask HR Assistant
+                      </div>
+                      <p className="text-xs text-text-secondary mt-0.5">
+                        Instant answers on benefits & policies
+                      </p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("branches")}
+                    className="p-4 rounded-2xl border border-border/80 bg-surface hover:border-cherry/50 dark:hover:border-lime/50 hover:bg-surface-hover transition-all text-left group shadow-xs hover:-translate-y-0.5 flex flex-col justify-between"
+                  >
+                    <div className="flex items-center justify-between w-full mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500">
+                        <MapPin size={18} />
+                      </div>
+                      <ArrowRight size={15} className="text-text-secondary group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-sm text-text-primary group-hover:text-blue-500 transition-colors">
+                        Office Locations
+                      </div>
+                      <p className="text-xs text-text-secondary mt-0.5">
+                        Global branches & working hours
+                      </p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("users")}
+                    className="p-4 rounded-2xl border border-border/80 bg-surface hover:border-cherry/50 dark:hover:border-lime/50 hover:bg-surface-hover transition-all text-left group shadow-xs hover:-translate-y-0.5 flex flex-col justify-between"
+                  >
+                    <div className="flex items-center justify-between w-full mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-500">
+                        <Users size={18} />
+                      </div>
+                      <ArrowRight size={15} className="text-text-secondary group-hover:text-purple-500 group-hover:translate-x-1 transition-all" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-sm text-text-primary group-hover:text-purple-500 transition-colors">
+                        Team Directory
+                      </div>
+                      <p className="text-xs text-text-secondary mt-0.5">
+                        Colleagues & assigned departments
+                      </p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("ingestion")}
+                    className="p-4 rounded-2xl border border-border/80 bg-surface hover:border-cherry/50 dark:hover:border-lime/50 hover:bg-surface-hover transition-all text-left group shadow-xs hover:-translate-y-0.5 flex flex-col justify-between"
+                  >
+                    <div className="flex items-center justify-between w-full mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
+                        <FileText size={18} />
+                      </div>
+                      <ArrowRight size={15} className="text-text-secondary group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-sm text-text-primary group-hover:text-amber-500 transition-colors">
+                        Knowledge Base
+                      </div>
+                      <p className="text-xs text-text-secondary mt-0.5">
+                        Official company documents & policies
+                      </p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* Context Summary Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {/* User Identity Card */}
-                <div className="p-5 border border-border bg-surface rounded-sm hover:border-cherry/40 dark:hover:border-lime/40 transition-colors shadow-2xs">
-                  <div className="text-xs uppercase font-bold text-text-secondary tracking-wider mb-2">
-                    Identity & Role
+                <div className="p-6 border border-border/80 bg-surface rounded-2xl hover:border-cherry/40 dark:hover:border-lime/40 transition-all shadow-xs space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs uppercase font-bold text-text-secondary tracking-wider">
+                      Your Profile
+                    </span>
+                    <span className="px-2.5 py-0.5 border border-border/80 bg-bg text-xs font-bold rounded-full text-cherry dark:text-lime uppercase">
+                      {user?.role}
+                    </span>
                   </div>
-                  <div className="text-xl font-bold text-text-primary">
-                    {user?.first_name} {user?.last_name || ""}
+                  <div>
+                    <div className="text-xl font-bold text-text-primary">
+                      {user?.first_name} {user?.last_name || ""}
+                    </div>
+                    <div className="text-xs text-text-secondary mt-0.5 font-mono">{user?.email}</div>
                   </div>
-                  <div className="text-xs text-text-secondary mt-0.5 font-mono">{user?.email}</div>
-                  <div className="mt-4 inline-block px-2.5 py-0.5 border border-border bg-bg text-xs font-semibold rounded-sm text-cherry dark:text-lime">
-                    {user?.role}
+                  <div className="pt-3 border-t border-border/60 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                    <UserCheck size={14} />
+                    <span>Active Verified Account</span>
                   </div>
                 </div>
 
                 {/* Assigned Branch Card */}
-                <div className="p-5 border border-border bg-surface rounded-sm hover:border-cherry/40 dark:hover:border-lime/40 transition-colors shadow-2xs">
-                  <div className="text-xs uppercase font-bold text-text-secondary tracking-wider mb-2 flex items-center gap-1.5">
-                    <MapPin size={14} className="text-cherry dark:text-lime" /> Assigned Branch
+                <div className="p-6 border border-border/80 bg-surface rounded-2xl hover:border-cherry/40 dark:hover:border-lime/40 transition-all shadow-xs space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs uppercase font-bold text-text-secondary tracking-wider flex items-center gap-1.5">
+                      <MapPin size={14} className="text-cherry dark:text-lime" /> Assigned Branch
+                    </span>
                   </div>
-                  <div className="text-xl font-bold text-text-primary">
-                    {user?.branch?.name || "Global / Unassigned"}
-                  </div>
-                  <div className="text-xs text-text-secondary mt-0.5">
-                    {user?.branch?.location || "Universal company-wide access"}
-                  </div>
-                  {user?.branch?.working_hours && (
-                    <div className="mt-4 flex items-center gap-1.5 text-xs text-text-secondary font-medium">
-                      <Clock size={13} className="text-cherry dark:text-lime" /> {user.branch.working_hours}
+                  <div>
+                    <div className="text-xl font-bold text-text-primary">
+                      {user?.branch?.name || "Global / Universal"}
                     </div>
-                  )}
+                    <div className="text-xs text-text-secondary mt-0.5">
+                      {user?.branch?.location || "Company-wide access across all locations"}
+                    </div>
+                  </div>
+                  <div className="pt-3 border-t border-border/60 flex items-center gap-2 text-xs text-text-secondary font-medium">
+                    <Clock size={13} className="text-cherry dark:text-lime" />
+                    <span>Working Hours: {user?.branch?.working_hours || "09:00 - 18:00"}</span>
+                  </div>
                 </div>
 
                 {/* Assigned Department Card */}
-                <div className="p-5 border border-border bg-surface rounded-sm hover:border-cherry/40 dark:hover:border-lime/40 transition-colors shadow-2xs">
-                  <div className="text-xs uppercase font-bold text-text-secondary tracking-wider mb-2 flex items-center gap-1.5">
-                    <Building2 size={14} className="text-cherry dark:text-lime" /> Department
+                <div className="p-6 border border-border/80 bg-surface rounded-2xl hover:border-cherry/40 dark:hover:border-lime/40 transition-all shadow-xs space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs uppercase font-bold text-text-secondary tracking-wider flex items-center gap-1.5">
+                      <Building2 size={14} className="text-cherry dark:text-lime" /> Department
+                    </span>
                   </div>
-                  <div className="text-xl font-bold text-text-primary">
-                    {user?.department?.name || "General Organization"}
-                  </div>
-                  <div className="text-xs text-text-secondary mt-0.5">
-                    {user?.department?.description || "All-access corporate department"}
-                  </div>
-                  {user?.department?.duty_timings && (
-                    <div className="mt-4 flex items-center gap-1.5 text-xs text-text-secondary font-medium">
-                      <Clock size={13} className="text-cherry dark:text-lime" /> {user.department.duty_timings}
+                  <div>
+                    <div className="text-xl font-bold text-text-primary">
+                      {user?.department?.name || "General Team"}
                     </div>
-                  )}
+                    <div className="text-xs text-text-secondary mt-0.5 truncate">
+                      {user?.department?.description || "All-access organizational department"}
+                    </div>
+                  </div>
+                  <div className="pt-3 border-t border-border/60 flex items-center gap-2 text-xs text-text-secondary font-medium">
+                    <Clock size={13} className="text-cherry dark:text-lime" />
+                    <span>Duty Timings: {user?.department?.duty_timings || "Standard Schedule"}</span>
+                  </div>
                 </div>
               </div>
 
               {/* Verified Permissions Section */}
-              <div className="p-6 border border-border bg-surface rounded-sm shadow-2xs">
-                <h2 className="text-base font-bold text-text-primary mb-2 flex items-center gap-2">
-                  <ShieldCheck size={18} className="text-cherry dark:text-lime" /> Role Privileges & Permissions
-                </h2>
-                <p className="text-xs text-text-secondary mb-4">
-                  The menu navigation and microservices available to you are dynamically governed by these server-verified permissions:
-                </p>
+              <div className="p-6 border border-border/80 bg-surface rounded-2xl shadow-xs space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-bold text-text-primary flex items-center gap-2">
+                    <ShieldCheck size={18} className="text-cherry dark:text-lime" /> Your Active Access Privileges
+                  </h2>
+                  <span className="text-xs text-text-secondary">
+                    {permissions.length} privileges granted
+                  </span>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
                   {permissions.map((perm) => (
                     <div
                       key={perm}
-                      className="p-3 border border-border bg-bg rounded-sm flex items-center gap-2.5 text-xs hover:border-cherry/40 dark:hover:border-lime/40 transition-colors"
+                      className="p-3 border border-border/70 bg-bg rounded-xl flex items-center gap-2.5 text-xs hover:border-cherry/40 dark:hover:border-lime/40 transition-colors"
                     >
                       <CheckCircle2 size={15} className="text-cherry dark:text-lime shrink-0" />
                       <span className="font-mono font-medium truncate">{perm}</span>
@@ -191,15 +314,15 @@ export function DashboardPage() {
           {/* Tab: Notifications */}
           {activeTab === "notifications" && (
             <div className="space-y-6 w-full max-w-7xl mx-auto animate-fadeIn">
-              <div className="border-b border-border pb-4">
+              <div className="border-b border-border/70 pb-4">
                 <h1 className="text-2xl font-bold tracking-tight text-text-primary">
                   Notification Dispatcher
                 </h1>
                 <p className="text-sm text-text-secondary mt-1">
-                  Connected to Notification Service (Port 8002 via Gmail SMTP)
+                  Connected to Notification Service via Gmail SMTP
                 </p>
               </div>
-              <div className="p-6 border border-border bg-surface rounded-sm shadow-2xs space-y-3">
+              <div className="p-6 border border-border/80 bg-surface rounded-2xl shadow-xs space-y-3">
                 <div className="flex items-center gap-2 text-sm font-bold text-cherry dark:text-lime">
                   <Bell size={16} /> SMTP Status: Operational
                 </div>
@@ -214,3 +337,4 @@ export function DashboardPage() {
     </div>
   );
 }
+

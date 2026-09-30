@@ -28,7 +28,7 @@ export function BranchesView() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [modalError, setModalError] = useState("");
 
-  // Form Fields (Clean & focused: Name, Location, Address)
+  // Form Fields (Name, Location, Address)
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [address, setAddress] = useState("");
@@ -71,7 +71,6 @@ export function BranchesView() {
     e.preventDefault();
     setModalError("");
 
-    // Required Field Validation
     if (!name.trim()) {
       setModalError("Branch Name is required.");
       return;
@@ -124,22 +123,22 @@ export function BranchesView() {
   return (
     <div className="space-y-6 w-full max-w-7xl mx-auto animate-fadeIn">
       {/* Header with Title and Add Branch CTA */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/70 pb-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-text-primary flex items-center gap-2">
-            <Building2 className="text-cherry dark:text-lime" size={26} /> Branch Management
+            <Building2 className="text-cherry dark:text-lime" size={26} /> Branch Locations
           </h1>
           <p className="text-sm text-text-secondary mt-1">
-            Operational physical sites, global offices, and geographical headquarters
+            Operational physical sites, global offices, and regional workplaces
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={loadData}
             title="Refresh branches list"
-            className="p-2 border border-border bg-surface hover:bg-surface-hover rounded-sm text-text-secondary transition-colors"
+            className="p-2 border border-border/80 bg-surface hover:bg-surface-hover rounded-xl text-text-secondary transition-colors"
           >
             <RefreshCw size={15} />
           </button>
@@ -148,7 +147,7 @@ export function BranchesView() {
             <button
               type="button"
               onClick={handleOpenModal}
-              className="flex items-center gap-2 px-4 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-semibold text-xs uppercase tracking-wider transition-all shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm active:scale-95"
             >
               <Plus size={16} />
               <span>Add Branch</span>
@@ -159,15 +158,15 @@ export function BranchesView() {
 
       {/* Success / Error Alerts */}
       {successMsg && (
-        <div className="p-3 border border-emerald-500/50 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-sm text-xs flex items-center gap-2 animate-fadeIn">
-          <CheckCircle2 size={16} />
+        <div className="p-3.5 border border-emerald-500/50 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-xl text-xs flex items-center gap-2 animate-fadeIn">
+          <CheckCircle2 size={16} className="shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}
 
       {error && (
-        <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2">
-          <AlertCircle size={16} />
+        <div className="p-3.5 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-xl text-xs flex items-center gap-2">
+          <AlertCircle size={16} className="shrink-0" />
           <span>{error}</span>
         </div>
       )}
@@ -176,7 +175,7 @@ export function BranchesView() {
       {isLoading ? (
         <LoadingSpinner message="Loading registered branches..." />
       ) : branches.length === 0 ? (
-        <div className="p-12 border border-border bg-surface rounded-sm text-center space-y-3">
+        <div className="p-12 border border-border/80 bg-surface rounded-2xl text-center space-y-3">
           <Building2 size={36} className="mx-auto text-text-secondary/40" />
           <h3 className="font-bold text-base text-text-primary">No branches registered</h3>
           <p className="text-xs text-text-secondary max-w-sm mx-auto">
@@ -186,7 +185,7 @@ export function BranchesView() {
             <button
               type="button"
               onClick={handleOpenModal}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-btn-bg text-btn-text text-xs font-semibold rounded-sm mt-2"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-btn-bg text-btn-text text-xs font-bold uppercase rounded-xl mt-2 shadow-sm"
             >
               <Plus size={14} /> Add First Branch
             </button>
@@ -197,19 +196,19 @@ export function BranchesView() {
           {branches.map((b) => (
             <div
               key={b.id}
-              className="p-5 border border-border bg-surface rounded-sm hover:border-cherry/50 dark:hover:border-lime/50 transition-all shadow-xs flex flex-col justify-between"
+              className="p-6 border border-border/80 bg-surface rounded-2xl hover:border-cherry/50 dark:hover:border-lime/50 transition-all shadow-xs flex flex-col justify-between space-y-4 hover:-translate-y-0.5"
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className="text-[10px] font-mono text-text-secondary uppercase">
-                      Branch #{b.id}
+                    <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider">
+                      Location #{b.id}
                     </span>
                     <h3 className="font-bold text-base text-text-primary mt-0.5">
                       {b.name}
                     </h3>
                   </div>
-                  <span className="px-2 py-0.5 border border-border bg-bg text-[10px] font-semibold text-cherry dark:text-lime rounded-sm">
+                  <span className="px-2.5 py-0.5 border border-emerald-500/30 bg-emerald-500/10 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 rounded-full">
                     Active
                   </span>
                 </div>
@@ -221,7 +220,7 @@ export function BranchesView() {
                   </div>
 
                   {b.address && (
-                    <div className="text-[11px] pl-5 text-text-secondary">
+                    <div className="text-[11px] pl-5 text-text-secondary leading-relaxed">
                       {b.address}
                     </div>
                   )}
@@ -229,11 +228,11 @@ export function BranchesView() {
               </div>
 
               {canManage && (
-                <div className="mt-4 pt-3 border-t border-border flex justify-end">
+                <div className="pt-3 border-t border-border/60 flex justify-end">
                   <button
                     type="button"
                     onClick={() => handleDeleteBranch(b.id, b.name)}
-                    className="p-1.5 text-text-secondary hover:text-cherry dark:hover:text-vibrantRed hover:bg-bg rounded-sm transition-colors text-xs flex items-center gap-1"
+                    className="p-1.5 px-2.5 text-text-secondary hover:text-cherry dark:hover:text-vibrantRed hover:bg-bg rounded-lg transition-colors text-xs flex items-center gap-1.5 font-medium"
                     title="Delete Branch"
                   >
                     <Trash2 size={13} />
@@ -249,8 +248,8 @@ export function BranchesView() {
       {/* ================= ADD BRANCH MODAL POP-UP ================= */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn">
-          <div className="bg-surface border border-border rounded-sm max-w-lg w-full p-6 space-y-4 shadow-xl animate-scaleIn">
-            <div className="flex items-center justify-between border-b border-border pb-3">
+          <div className="bg-surface border border-border/80 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl animate-scaleIn">
+            <div className="flex items-center justify-between border-b border-border/70 pb-3">
               <h3 className="font-bold text-base text-text-primary flex items-center gap-2">
                 <Building2 size={18} className="text-cherry dark:text-lime" />
                 Register New Branch Location
@@ -258,15 +257,15 @@ export function BranchesView() {
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="text-text-secondary hover:text-text-primary p-1"
+                className="text-text-secondary hover:text-text-primary p-1.5 rounded-lg hover:bg-bg transition-colors"
               >
                 <X size={16} />
               </button>
             </div>
 
             {modalError && (
-              <div className="p-2.5 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2">
-                <AlertCircle size={14} />
+              <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-xl text-xs flex items-center gap-2">
+                <AlertCircle size={14} className="shrink-0" />
                 <span>{modalError}</span>
               </div>
             )}
@@ -274,7 +273,7 @@ export function BranchesView() {
             <form onSubmit={handleCreateBranch} className="space-y-4">
               {/* Branch Name Field */}
               <div>
-                <label className="block text-xs font-bold text-text-primary mb-1">
+                <label className="block text-xs font-bold text-text-primary mb-1.5">
                   Branch Name <span className="text-vibrantRed">*</span>
                 </label>
                 <input
@@ -283,13 +282,13 @@ export function BranchesView() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. London HQ, New York Tech Center, Lahore Branch"
-                  className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                  className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all"
                 />
               </div>
 
               {/* Location Field */}
               <div>
-                <label className="block text-xs font-bold text-text-primary mb-1">
+                <label className="block text-xs font-bold text-text-primary mb-1.5">
                   Location (City, Country) <span className="text-vibrantRed">*</span>
                 </label>
                 <input
@@ -298,13 +297,13 @@ export function BranchesView() {
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="e.g. London, United Kingdom or New York, USA"
-                  className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                  className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all"
                 />
               </div>
 
               {/* Street Address */}
               <div>
-                <label className="block text-xs font-bold text-text-primary mb-1">
+                <label className="block text-xs font-bold text-text-primary mb-1.5">
                   Full Street Address <span className="text-text-secondary font-normal">(Optional)</span>
                 </label>
                 <input
@@ -312,24 +311,24 @@ export function BranchesView() {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="e.g. 100 Bishopsgate, Level 14"
-                  className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                  className="w-full p-2.5 px-3 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all"
                 />
               </div>
 
               {/* Modal Actions */}
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-border">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-border/70">
                 <button
                   type="button"
                   onClick={handleCloseModal}
                   disabled={isSubmitting}
-                  className="px-4 py-2 text-xs font-medium border border-border bg-bg hover:bg-surface-hover rounded-sm transition-colors"
+                  className="px-4 py-2 text-xs font-medium border border-border/80 bg-bg hover:bg-surface-hover rounded-xl transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 text-xs font-bold uppercase tracking-wider bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm transition-colors shadow-sm disabled:opacity-50"
+                  className="px-5 py-2 text-xs font-bold uppercase tracking-wider bg-btn-bg text-btn-text hover:bg-btn-hover rounded-xl transition-all shadow-sm disabled:opacity-50"
                 >
                   {isSubmitting ? "Saving..." : "Create Branch"}
                 </button>

@@ -174,21 +174,21 @@ Standard probation period for all new hires is 90 days. During probation, either
   return (
     <div className="space-y-6 w-full max-w-7xl mx-auto animate-fadeIn">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/70 pb-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-text-primary flex items-center gap-2">
-            <FileText className="text-cherry dark:text-lime" size={26} /> Company Documents & Policies
+            <FileText className="text-cherry dark:text-lime" size={26} /> Knowledge Base Documents
           </h1>
           <p className="text-sm text-text-secondary mt-1">
-            Upload and manage corporate policies, employee handbooks, and HR documents
+            Upload and manage company policies, employee handbooks, and HR benefit guidelines
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={handleLoadSample}
-            className="flex items-center gap-1.5 px-3 py-1.5 border border-cherry/40 dark:border-lime/40 bg-surface hover:bg-surface-hover rounded-sm text-xs font-semibold text-cherry dark:text-lime transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 border border-cherry/40 dark:border-lime/40 bg-surface hover:bg-surface-hover rounded-xl text-xs font-semibold text-cherry dark:text-lime transition-all shadow-2xs"
           >
             <Sparkles size={14} />
             <span>Load Sample Policy</span>
@@ -198,54 +198,54 @@ Standard probation period for all new hires is 90 days. During probation, either
 
       {/* Real-time Ingestion Result Card */}
       {lastResult && (
-        <div className="p-5 border border-emerald-500/50 bg-emerald-500/10 rounded-sm space-y-2 animate-scaleIn">
+        <div className="p-5 border border-emerald-500/50 bg-emerald-500/10 rounded-2xl space-y-2 animate-scaleIn">
           <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider">
             <CheckCircle2 size={16} />
-            <span>Document Uploaded Successfully</span>
+            <span>Document Saved & Indexed Successfully</span>
           </div>
           <div className="space-y-1 text-xs text-text-primary">
             <div className="font-bold text-sm">{lastResult.source_document}</div>
             <div className="text-text-secondary text-[11px] font-mono">
-              Sections Processed: <span className="font-bold text-text-primary">{lastResult.chunks_created}</span> &bull; Status: Ready
+              Sections Processed: <span className="font-bold text-text-primary">{lastResult.chunks_created}</span> &bull; Status: Ready for queries
             </div>
           </div>
         </div>
       )}
 
       {/* Main Ingestion Panel Form */}
-      <div className="p-6 border border-border bg-surface rounded-sm space-y-5 shadow-xs">
+      <div className="p-6 border border-border/80 bg-surface rounded-2xl space-y-5 shadow-xs">
         {/* Mode Switcher */}
-        <div className="flex items-center border-b border-border">
+        <div className="flex items-center border-b border-border/70">
           <button
             type="button"
             onClick={() => setActiveTab("file")}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
+            className={`flex items-center gap-2 px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
               activeTab === "file"
                 ? "border-cherry dark:border-lime text-text-primary"
                 : "border-transparent text-text-secondary hover:text-text-primary"
             }`}
           >
             <UploadCloud size={16} />
-            <span>Upload PDF / Text File</span>
+            <span>Upload Document (.PDF / .TXT)</span>
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("text")}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
+            className={`flex items-center gap-2 px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
               activeTab === "text"
                 ? "border-cherry dark:border-lime text-text-primary"
                 : "border-transparent text-text-secondary hover:text-text-primary"
             }`}
           >
             <Type size={16} />
-            <span>Paste Raw Text / Policy</span>
+            <span>Paste Policy Text</span>
           </button>
         </div>
 
         {/* Error Banner */}
         {errorMsg && (
-          <div className="p-3 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-sm text-xs flex items-center gap-2">
-            <AlertCircle size={16} />
+          <div className="p-3.5 border border-vibrantRed/50 bg-vibrantRed/10 text-vibrantRed rounded-xl text-xs flex items-center gap-2">
+            <AlertCircle size={16} className="shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
@@ -253,7 +253,7 @@ Standard probation period for all new hires is 90 days. During probation, either
         <form onSubmit={handleIngest} className="space-y-4">
           {/* Document Title */}
           <div>
-            <label className="block text-xs font-bold text-text-primary mb-1">
+            <label className="block text-xs font-bold text-text-primary mb-1.5">
               Document Title <span className="text-vibrantRed">*</span>
             </label>
             <input
@@ -261,15 +261,15 @@ Standard probation period for all new hires is 90 days. During probation, either
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Employee Handbook 2026, Leave Policy, IT Allowance"
-              className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime font-sans"
+              placeholder="e.g. Employee Leave & Medical Policy 2026, Home Office Allowance"
+              className="w-full p-2.5 px-3.5 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime font-sans transition-all"
             />
           </div>
 
           {/* Mode A: File Upload Dropzone */}
           {activeTab === "file" && (
             <div>
-              <label className="block text-xs font-bold text-text-primary mb-1">
+              <label className="block text-xs font-bold text-text-primary mb-1.5">
                 Select Document (.pdf, .txt, .md) <span className="text-vibrantRed">*</span>
               </label>
               <input
@@ -283,10 +283,10 @@ Standard probation period for all new hires is 90 days. During probation, either
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleFileDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`border-2 border-dashed rounded-sm p-8 text-center cursor-pointer transition-all ${
+                className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${
                   selectedFile
                     ? "border-cherry dark:border-lime bg-bg"
-                    : "border-border hover:border-cherry/50 dark:hover:border-lime/50 bg-input-bg hover:bg-surface-hover"
+                    : "border-border/80 hover:border-cherry/50 dark:hover:border-lime/50 bg-input-bg hover:bg-surface-hover"
                 }`}
               >
                 {selectedFile ? (
@@ -294,17 +294,17 @@ Standard probation period for all new hires is 90 days. During probation, either
                     <FileCheck size={36} className="mx-auto text-cherry dark:text-lime animate-bounce" />
                     <div className="font-bold text-sm text-text-primary">{selectedFile.name}</div>
                     <div className="text-xs text-text-secondary">
-                      {(selectedFile.size / 1024).toFixed(1)} KB &bull; Click or drop another file to replace
+                      {(selectedFile.size / 1024).toFixed(1)} KB &bull; Click to replace file
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-2">
                     <UploadCloud size={36} className="mx-auto text-text-secondary/60" />
                     <div className="text-sm font-semibold text-text-primary">
-                      Click to browse or drag & drop document
+                      Click to choose file or drag & drop document here
                     </div>
                     <div className="text-xs text-text-secondary">
-                      Supports PDF, Plain Text (.txt), and Markdown (.md)
+                      Supports standard PDF and plain text formats
                     </div>
                   </div>
                 )}
@@ -315,9 +315,9 @@ Standard probation period for all new hires is 90 days. During probation, either
           {/* Mode B: Raw Text Input */}
           {activeTab === "text" && (
             <div>
-              <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-bold text-text-primary">
-                  Policy Document Content <span className="text-vibrantRed">*</span>
+                  Policy Content <span className="text-vibrantRed">*</span>
                 </label>
                 <span className="text-[10px] font-mono text-text-secondary">
                   {rawText.length} characters
@@ -328,38 +328,38 @@ Standard probation period for all new hires is 90 days. During probation, either
                 required
                 value={rawText}
                 onChange={(e) => setRawText(e.target.value)}
-                placeholder="Paste full text of policy, clauses, handbooks, or SOPs here..."
-                className="w-full p-3 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime font-mono leading-relaxed"
+                placeholder="Paste full text of policy, clauses, handbooks, or guidelines here..."
+                className="w-full p-3.5 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime font-mono leading-relaxed transition-all"
               />
             </div>
           )}
 
           {/* Scope & Access Control Tagging */}
-          <div className="pt-2 border-t border-border space-y-3">
+          <div className="pt-2 border-t border-border/70 space-y-3">
             <label className="block text-xs font-bold text-text-primary">
-              Document Scope & Access Permissions
+              Document Visibility Scope
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <button
                 type="button"
                 onClick={() => setScopeType("company-wide")}
-                className={`p-2.5 border rounded-sm text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
+                className={`p-3 border rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
                   scopeType === "company-wide"
                     ? "border-cherry dark:border-lime bg-bg text-text-primary font-bold shadow-xs"
-                    : "border-border bg-input-bg text-text-secondary hover:text-text-primary"
+                    : "border-border/80 bg-input-bg text-text-secondary hover:text-text-primary"
                 }`}
               >
                 <Globe size={14} className={scopeType === "company-wide" ? "text-cherry dark:text-lime" : ""} />
-                <span>Company-Wide</span>
+                <span>All Staff (Universal)</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setScopeType("branch")}
-                className={`p-2.5 border rounded-sm text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
+                className={`p-3 border rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
                   scopeType === "branch"
                     ? "border-cherry dark:border-lime bg-bg text-text-primary font-bold shadow-xs"
-                    : "border-border bg-input-bg text-text-secondary hover:text-text-primary"
+                    : "border-border/80 bg-input-bg text-text-secondary hover:text-text-primary"
                 }`}
               >
                 <Building2 size={14} className={scopeType === "branch" ? "text-cherry dark:text-lime" : ""} />
@@ -369,10 +369,10 @@ Standard probation period for all new hires is 90 days. During probation, either
               <button
                 type="button"
                 onClick={() => setScopeType("department")}
-                className={`p-2.5 border rounded-sm text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
+                className={`p-3 border rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
                   scopeType === "department"
                     ? "border-cherry dark:border-lime bg-bg text-text-primary font-bold shadow-xs"
-                    : "border-border bg-input-bg text-text-secondary hover:text-text-primary"
+                    : "border-border/80 bg-input-bg text-text-secondary hover:text-text-primary"
                 }`}
               >
                 <FolderTree size={14} className={scopeType === "department" ? "text-cherry dark:text-lime" : ""} />
@@ -383,13 +383,13 @@ Standard probation period for all new hires is 90 days. During probation, either
             {/* Branch selector if specific branch selected */}
             {scopeType === "branch" && (
               <div className="pt-2 animate-fadeIn">
-                <label className="block text-xs font-semibold text-text-secondary mb-1">
+                <label className="block text-xs font-semibold text-text-secondary mb-1.5">
                   Select Target Branch:
                 </label>
                 <select
                   value={selectedBranchId}
                   onChange={(e) => setSelectedBranchId(e.target.value)}
-                  className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                  className="w-full p-2.5 px-3.5 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all cursor-pointer"
                 >
                   {branches.map((b) => (
                     <option key={b.id} value={b.id}>
@@ -403,13 +403,13 @@ Standard probation period for all new hires is 90 days. During probation, either
             {/* Department selector if specific department selected */}
             {scopeType === "department" && (
               <div className="pt-2 animate-fadeIn">
-                <label className="block text-xs font-semibold text-text-secondary mb-1">
+                <label className="block text-xs font-semibold text-text-secondary mb-1.5">
                   Select Target Department:
                 </label>
                 <select
                   value={selectedDeptId}
                   onChange={(e) => setSelectedDeptId(e.target.value)}
-                  className="w-full p-2.5 border border-border bg-input-bg rounded-sm text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime"
+                  className="w-full p-2.5 px-3.5 border border-border/80 bg-input-bg rounded-xl text-xs text-text-primary outline-none focus:border-cherry dark:focus:border-lime transition-all cursor-pointer"
                 >
                   {departments.map((d) => (
                     <option key={d.id} value={d.id}>
@@ -422,11 +422,11 @@ Standard probation period for all new hires is 90 days. During probation, either
           </div>
 
           {/* Submit CTA */}
-          <div className="pt-3 border-t border-border flex justify-end">
+          <div className="pt-3 border-t border-border/70 flex justify-end">
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full sm:w-auto px-6 py-2.5 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-sm font-bold text-xs uppercase tracking-wider transition-all shadow-sm disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-6 py-2.5 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm disabled:opacity-50 flex items-center justify-center gap-2 active:scale-95"
             >
               {isSubmitting ? (
                 <>
@@ -445,17 +445,17 @@ Standard probation period for all new hires is 90 days. During probation, either
       </div>
 
       {/* Registry Table: All Ingested Documents in Knowledge Base */}
-      <div className="space-y-3 pt-4 border-t border-border">
+      <div className="space-y-3 pt-4 border-t border-border/70">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-bold text-text-primary flex items-center gap-2">
             <FileText size={18} className="text-cherry dark:text-lime" />
-            Company Document Registry ({documents.length})
+            Company Knowledge Base ({documents.length} Documents)
           </h2>
           <button
             type="button"
             onClick={loadDocuments}
             title="Reload documents"
-            className="p-1.5 border border-border bg-surface hover:bg-surface-hover rounded-sm text-text-secondary"
+            className="p-1.5 border border-border/80 bg-surface hover:bg-surface-hover rounded-lg text-text-secondary"
           >
             <RefreshCw size={13} />
           </button>
@@ -464,52 +464,52 @@ Standard probation period for all new hires is 90 days. During probation, either
         {isLoadingDocs ? (
           <LoadingSpinner message="Loading company documents..." />
         ) : documents.length === 0 ? (
-          <div className="p-8 border border-border bg-surface rounded-sm text-center text-xs text-text-secondary">
+          <div className="p-8 border border-border/80 bg-surface rounded-2xl text-center text-xs text-text-secondary">
             No documents uploaded yet. Upload a document or click "Load Sample Policy" above to add your first policy.
           </div>
         ) : (
-          <div className="border border-border bg-surface rounded-sm overflow-hidden shadow-xs">
+          <div className="border border-border/80 bg-surface rounded-2xl overflow-hidden shadow-xs">
             <table className="w-full text-left text-xs">
-              <thead className="border-b border-border bg-bg uppercase tracking-wider text-text-secondary font-bold">
+              <thead className="border-b border-border/70 bg-bg/70 uppercase tracking-wider text-text-secondary font-bold text-[11px]">
                 <tr>
-                  <th className="p-3">Document Title</th>
-                  <th className="p-3">Access Scope</th>
-                  <th className="p-3">Sections</th>
-                  <th className="p-3">Document ID</th>
-                  <th className="p-3">Status</th>
+                  <th className="p-4">Document Title</th>
+                  <th className="p-4">Access Scope</th>
+                  <th className="p-4">Sections</th>
+                  <th className="p-4">Document Reference</th>
+                  <th className="p-4">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody className="divide-y divide-border/60">
                 {documents.map((doc, idx) => (
-                  <tr key={idx} className="hover:bg-bg/50 transition-colors">
-                    <td className="p-3 font-semibold text-text-primary flex items-center gap-2">
+                  <tr key={idx} className="hover:bg-bg/40 transition-colors">
+                    <td className="p-4 font-semibold text-text-primary flex items-center gap-2">
                       <FileText size={14} className="text-cherry dark:text-lime shrink-0" />
                       <span>{doc.source_document || doc.title}</span>
                     </td>
-                    <td className="p-3">
+                    <td className="p-4">
                       {doc.is_company_wide || (!doc.branch_id && !doc.department_id) ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 border border-border bg-bg rounded-sm text-[10px] font-semibold text-cherry dark:text-lime uppercase">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 border border-border/80 bg-bg rounded-full text-[10px] font-semibold text-cherry dark:text-lime uppercase">
                           <Globe size={10} /> Universal (All)
                         </span>
                       ) : doc.branch_id ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 border border-border bg-bg rounded-sm text-[10px] font-semibold text-text-primary">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 border border-border/80 bg-bg rounded-full text-[10px] font-semibold text-text-primary">
                           <Building2 size={10} /> Branch #{doc.branch_id}
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 border border-border bg-bg rounded-sm text-[10px] font-semibold text-text-primary">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 border border-border/80 bg-bg rounded-full text-[10px] font-semibold text-text-primary">
                           <FolderTree size={10} /> Dept #{doc.department_id}
                         </span>
                       )}
                     </td>
-                    <td className="p-3 font-mono font-semibold">
+                    <td className="p-4 font-mono font-semibold">
                       {doc.chunk_count || 1} sections
                     </td>
-                    <td className="p-3 font-mono text-[10px] text-text-secondary truncate max-w-xs">
+                    <td className="p-4 font-mono text-[10px] text-text-secondary truncate max-w-xs">
                       {doc.content_hash ? doc.content_hash.slice(0, 16) + "..." : "active"}
                     </td>
-                    <td className="p-3">
-                      <span className="px-2 py-0.5 border border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-sm text-[10px] uppercase font-bold">
-                        Active & Available
+                    <td className="p-4">
+                      <span className="px-2.5 py-0.5 border border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-full text-[10px] uppercase font-bold">
+                        Active
                       </span>
                     </td>
                   </tr>
