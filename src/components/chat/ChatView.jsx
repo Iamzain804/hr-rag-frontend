@@ -286,16 +286,6 @@ export function ChatView() {
               </div>
             </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleNewChat}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-border/80 bg-bg hover:bg-surface text-xs font-semibold rounded-xl text-text-primary transition-colors shadow-2xs"
-            >
-              <span>+ New Chat</span>
-            </button>
-          </div>
         </header>
 
         {/* Error Notification Banner */}

@@ -210,15 +210,6 @@ export function ChatInput({
           </div>
         </form>
 
-        {/* Footer Hint */}
-        <div className="flex items-center justify-between text-[11px] text-text-secondary/70 px-1 pt-0.5">
-          <span>
-            Press <kbd className="px-1.5 py-0.5 border border-border/80 bg-surface rounded-md font-mono text-[10px]">Enter</kbd> to send, <kbd className="px-1.5 py-0.5 border border-border/80 bg-surface rounded-md font-mono text-[10px]">Shift + Enter</kbd> for new line
-          </span>
-          <span className="flex items-center gap-1 opacity-80">
-            <HelpCircle size={11} /> Grounded in verified company handbooks
-          </span>
-        </div>
       </div>
 
       {/* Paste Text Snippet Modal */}
