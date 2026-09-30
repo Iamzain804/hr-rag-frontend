@@ -98,7 +98,7 @@ export function ChatInput({
   };
 
   return (
-    <div className="p-3 sm:p-4 bg-bg/80 backdrop-blur-md border-t border-border/40 shrink-0">
+    <div className="p-3 sm:p-4 bg-transparent shrink-0">
       <div className="max-w-3xl mx-auto space-y-2">
         {/* Hidden File Input */}
         <input
@@ -111,7 +111,7 @@ export function ChatInput({
 
         {/* Attachment Pill Indicator */}
         {(attachmentFile || attachmentText) && (
-          <div className="p-2.5 px-3.5 border border-border/80 bg-surface rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs animate-fadeIn shadow-2xs">
+          <div className="p-2.5 px-3.5 border border-border/50 bg-surface rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs animate-fadeIn shadow-2xs">
             <div className="flex items-center gap-2 overflow-hidden">
               {attachmentFile ? (
                 attachmentFile.type.startsWith("image/") ? (
@@ -146,7 +146,7 @@ export function ChatInput({
         {/* Floating Input Container Box */}
         <form
           onSubmit={handleSend}
-          className="relative border border-border/80 bg-surface rounded-2xl focus-within:border-cherry dark:focus-within:border-lime focus-within:ring-2 focus-within:ring-cherry/10 dark:focus-within:ring-lime/10 transition-all p-3 shadow-sm space-y-2"
+          className="relative border border-border/50 bg-surface rounded-2xl focus-within:border-cherry dark:focus-within:border-lime focus-within:ring-2 focus-within:ring-cherry/10 dark:focus-within:ring-lime/10 transition-all p-3 shadow-md space-y-2"
         >
           {/* Textarea */}
           <textarea
@@ -160,8 +160,8 @@ export function ChatInput({
             className="w-full bg-transparent border-none outline-none resize-none px-2 py-1 text-sm text-text-primary placeholder:text-text-secondary/70 max-h-48 leading-relaxed font-sans"
           />
 
-          {/* Bottom Toolbar: Attachments on Left + Send on Right */}
-          <div className="flex items-center justify-between pt-1 border-t border-border/30 gap-2">
+          {/* Bottom Toolbar: Attachments on Left + Send on Right (No internal divider line) */}
+          <div className="flex items-center justify-between pt-1 gap-2">
             <div className="flex items-center gap-1 text-text-secondary">
               <button
                 type="button"

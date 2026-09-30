@@ -126,25 +126,16 @@ export function ChatMessage({ message, isStreaming = false, onFlagToHR }) {
 
   if (isUser) {
     return (
-      <div className="flex justify-end w-full max-w-4xl mx-auto px-4 sm:px-6 py-2 animate-fadeIn" dir={isUrdu ? "rtl" : "ltr"}>
-        <div className="max-w-2xl bg-surface border border-border/80 text-text-primary rounded-2xl rounded-tr-xs p-4 sm:p-5 shadow-xs space-y-2">
-          <div className="flex items-center justify-between gap-4 text-xs text-text-secondary pb-1.5 border-b border-border/40" dir="ltr">
-            <span className="font-bold text-xs text-text-primary flex items-center gap-1.5">
-              <span className="w-5 h-5 rounded-full bg-cherry/10 dark:bg-lime/10 text-cherry dark:text-lime flex items-center justify-center font-bold text-[10px]">
-                <User size={12} />
-              </span>
-              You
-            </span>
-          </div>
-
+      <div className="flex justify-end w-full max-w-3xl mx-auto px-4 py-2 animate-fadeIn" dir={isUrdu ? "rtl" : "ltr"}>
+        <div className="max-w-xl bg-surface/90 border border-border/40 text-text-primary rounded-2xl rounded-br-xs px-4 sm:px-5 py-3 shadow-xs space-y-1.5">
           {message.has_attachment && (
-            <div className="p-2.5 border border-border/80 bg-bg rounded-xl text-xs space-y-1 my-1" dir="ltr">
-              <div className="flex items-center gap-1.5 font-semibold text-cherry dark:text-lime">
-                <Paperclip size={13} />
+            <div className="p-2 border border-border/40 bg-bg/50 rounded-xl text-xs space-y-1 mb-1.5" dir="ltr">
+              <div className="flex items-center gap-1.5 font-semibold text-cherry dark:text-lime text-[11px]">
+                <Paperclip size={12} />
                 <span>Temporary Context Attached</span>
               </div>
               {message.attachment_text && (
-                <p className="text-text-secondary line-clamp-2 italic font-mono text-[11px]">
+                <p className="text-text-secondary line-clamp-2 italic font-mono text-[10px]">
                   "{message.attachment_text.slice(0, 150)}..."
                 </p>
               )}
@@ -160,75 +151,79 @@ export function ChatMessage({ message, isStreaming = false, onFlagToHR }) {
   }
 
   return (
-    <div className="flex justify-start w-full max-w-4xl mx-auto px-4 sm:px-6 py-2.5 animate-fadeIn" dir={isUrdu ? "rtl" : "ltr"}>
-      <div className="w-full bg-surface border border-border/80 rounded-2xl p-5 sm:p-6 shadow-xs transition-all space-y-3.5">
-        {/* Header Ribbon */}
-        <div className="flex items-center justify-between border-b border-border/50 pb-3" dir="ltr">
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <div className="w-7 h-7 rounded-lg bg-surface border border-border/80 flex items-center justify-center shadow-2xs">
-              <CrocodileLogo size={18} />
+    <div className="flex justify-start w-full max-w-3xl mx-auto px-4 py-3 animate-fadeIn" dir={isUrdu ? "rtl" : "ltr"}>
+      <div className="w-full flex items-start gap-3.5">
+        {/* Avatar */}
+        <div className="w-8 h-8 rounded-xl bg-surface border border-border/50 flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+          <CrocodileLogo size={20} />
+        </div>
+
+        {/* Content Body */}
+        <div className="flex-1 space-y-2 overflow-hidden">
+          {/* Header Bar */}
+          <div className="flex items-center justify-between" dir="ltr">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-text-primary">
+                HR Assistant
+              </span>
+
+              {hasUnverifiedContext && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold tracking-wider border border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400 rounded-full">
+                  <AlertTriangle size={10} />
+                  Employee Context
+                </span>
+              )}
+
+              {!hasUnverifiedContext && !isFallbackMessage && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold tracking-wide border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-full">
+                  <CheckCircle2 size={10} />
+                  Verified Policy
+                </span>
+              )}
             </div>
-            <span className="text-xs font-bold text-text-primary">
-              HR Assistant
-            </span>
 
-            {hasUnverifiedContext && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider border border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-400 rounded-full">
-                <AlertTriangle size={10} />
-                Includes Employee Context
-              </span>
-            )}
-
-            {!hasUnverifiedContext && !isFallbackMessage && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-full">
-                <CheckCircle2 size={10} />
-                Verified Company Policy
-              </span>
+            {!isStreaming && (
+              <button
+                type="button"
+                onClick={copyToClipboard}
+                title="Copy response"
+                className="text-text-secondary hover:text-text-primary p-1 rounded-lg hover:bg-surface transition-colors"
+              >
+                {copied ? <Check size={14} className="text-cherry dark:text-lime" /> : <Copy size={14} />}
+              </button>
             )}
           </div>
 
-          {/* Action Tools */}
-          {!isStreaming && (
-            <button
-              type="button"
-              onClick={copyToClipboard}
-              title="Copy response"
-              className="text-text-secondary hover:text-text-primary p-1.5 rounded-lg hover:bg-bg transition-colors"
-            >
-              {copied ? <Check size={14} className="text-cherry dark:text-lime" /> : <Copy size={14} />}
-            </button>
+          {/* Response Markdown Content */}
+          <div className={`text-text-primary break-words leading-relaxed text-sm ${isUrdu ? "text-right" : "text-left"}`}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]} components={MarkdownComponents}>
+              {cleanedContent}
+            </ReactMarkdown>
+          </div>
+
+          {/* Streaming Cursor */}
+          {isStreaming && (
+            <span className="inline-block w-2 h-4 bg-cherry dark:bg-lime animate-pulse ml-0.5 align-middle rounded-xs" />
+          )}
+
+          {/* Fallback Missing Doc Escalation */}
+          {isFallbackMessage && !isStreaming && (
+            <div className="mt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-surface/50 border border-border/40 rounded-xl" dir="ltr">
+              <span className="text-xs text-text-secondary">
+                Policy document missing? Escalate directly:
+              </span>
+              <button
+                type="button"
+                onClick={handleFlag}
+                disabled={flagged}
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-btn-bg text-btn-text hover:bg-btn-hover disabled:opacity-50 transition-all shadow-sm"
+              >
+                <Flag size={12} />
+                {flagged ? "Flagged to HR Team" : "Flag to HR Department"}
+              </button>
+            </div>
           )}
         </div>
-
-        {/* Response Markdown Content */}
-        <div className={`text-text-primary break-words leading-relaxed text-sm ${isUrdu ? "text-right" : "text-left"}`}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]} components={MarkdownComponents}>
-            {cleanedContent}
-          </ReactMarkdown>
-        </div>
-
-        {/* Streaming Cursor */}
-        {isStreaming && (
-          <span className="inline-block w-2 h-4 bg-cherry dark:bg-lime animate-pulse ml-0.5 align-middle rounded-xs" />
-        )}
-
-        {/* Fallback Missing Doc Escalation */}
-        {isFallbackMessage && !isStreaming && (
-          <div className="mt-3 pt-3 border-t border-border/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3" dir="ltr">
-            <span className="text-xs text-text-secondary">
-              Information not found in current handbooks.
-            </span>
-            <button
-              type="button"
-              onClick={handleFlag}
-              disabled={flagged}
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-btn-bg text-btn-text hover:bg-btn-hover disabled:opacity-50 transition-all shadow-sm"
-            >
-              <Flag size={12} />
-              {flagged ? "Flagged to HR Team" : "Flag to HR Department"}
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
