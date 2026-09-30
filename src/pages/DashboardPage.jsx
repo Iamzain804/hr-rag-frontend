@@ -93,20 +93,14 @@ export function DashboardPage() {
           {/* Tab: Overview (Welcoming & Human-Friendly) */}
           {activeTab === "overview" && (
             <div className="space-y-8 w-full max-w-7xl mx-auto animate-fadeIn">
-              {/* Top Hero Greeting Banner */}
-              <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-surface to-surface/80 border border-border/70 p-6 sm:p-8 shadow-sm">
-                <div className="relative z-10 max-w-2xl space-y-2">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cherry/20 dark:border-lime/20 bg-cherry/5 dark:bg-lime/5 text-cherry dark:text-lime text-xs font-semibold">
-                    <Sparkles size={13} />
-                    <span>Workspace Dashboard</span>
-                  </div>
-                  <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-text-primary">
-                    Welcome back, {user?.first_name || "Team Member"} 👋
-                  </h1>
-                  <p className="text-sm text-text-secondary leading-relaxed">
-                    Your workplace assistant is ready. Ask policy questions, check medical & leave benefits, or manage team directories with ease.
-                  </p>
-                </div>
+              {/* Top Clean Greeting Header (No Box) */}
+              <div className="space-y-1.5 pt-1">
+                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-text-primary">
+                  Welcome, {user?.first_name ? `${user.first_name} ${user?.last_name || ""}`.trim() : (user?.username || user?.role || "User")} 👋
+                </h1>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  Your workplace assistant is ready. Ask policy questions, check medical & leave benefits, or manage team directories with ease.
+                </p>
               </div>
 
               {/* Quick Actions Shortcuts */}
@@ -265,29 +259,6 @@ export function DashboardPage() {
                     <Clock size={13} className="text-cherry dark:text-lime" />
                     <span>Duty Timings: {user?.department?.duty_timings || "Standard Schedule"}</span>
                   </div>
-                </div>
-              </div>
-
-              {/* Verified Permissions Section */}
-              <div className="p-6 border border-border/80 bg-surface rounded-2xl shadow-xs space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-bold text-text-primary flex items-center gap-2">
-                    <ShieldCheck size={18} className="text-cherry dark:text-lime" /> Your Active Access Privileges
-                  </h2>
-                  <span className="text-xs text-text-secondary">
-                    {permissions.length} privileges granted
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
-                  {permissions.map((perm) => (
-                    <div
-                      key={perm}
-                      className="p-3 border border-border/70 bg-bg rounded-xl flex items-center gap-2.5 text-xs hover:border-cherry/40 dark:hover:border-lime/40 transition-colors"
-                    >
-                      <CheckCircle2 size={15} className="text-cherry dark:text-lime shrink-0" />
-                      <span className="font-mono font-medium truncate">{perm}</span>
-                    </div>
-                  ))}
                 </div>
               </div>
             </div>
