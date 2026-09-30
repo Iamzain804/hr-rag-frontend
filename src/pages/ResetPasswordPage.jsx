@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { KeyRound, ShieldCheck, AlertCircle, CheckCircle2 } from "lucide-react";
 import { api } from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 export function ResetPasswordPage() {
-  const [currentPassword, setCurrentPassword] = useState("");
+  const location = useLocation();
+  const [currentPassword, setCurrentPassword] = useState(location.state?.tempPassword || "");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -145,7 +146,7 @@ export function ResetPasswordPage() {
                 required
                 tabIndex={3}
                 value={confirmPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Repeat new password"
                 className="w-full px-3 py-2 bg-input-bg border border-border text-text-primary text-sm rounded-sm focus:outline-none focus:border-cherry dark:focus:border-lime focus:ring-1 focus:ring-cherry dark:focus:ring-lime"
               />

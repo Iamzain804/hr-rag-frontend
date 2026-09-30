@@ -30,7 +30,7 @@ export function LoginPage() {
       
       // If user is required to reset temporary password, send to reset screen
       if (userContext.must_reset_password) {
-        navigate("/reset-password", { replace: true });
+        navigate("/reset-password", { replace: true, state: { tempPassword: password } });
       } else {
         const from = location.state?.from?.pathname || "/dashboard";
         navigate(from, { replace: true });
