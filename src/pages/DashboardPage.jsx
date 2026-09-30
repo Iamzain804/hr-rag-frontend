@@ -20,6 +20,7 @@ import { ChatView } from "../components/chat/ChatView";
 import { BranchesView } from "../components/organization/BranchesView";
 import { DepartmentsView } from "../components/organization/DepartmentsView";
 import { DocumentIngestionView } from "../components/ingestion/DocumentIngestionView";
+import { UserManagementView } from "../components/users/UserManagementView";
 
 export function DashboardPage() {
   const { user, permissions, hasAnyPermission, error: authError, refreshContext } = useAuth();
@@ -175,65 +176,7 @@ export function DashboardPage() {
           {activeTab === "departments" && <DepartmentsView />}
 
           {/* Tab: User Management */}
-          {activeTab === "users" && (
-            <div className="space-y-6 w-full max-w-7xl mx-auto animate-fadeIn">
-              <div className="border-b border-border pb-4">
-                <h1 className="text-2xl font-bold tracking-tight text-text-primary">
-                  User Directory
-                </h1>
-                <p className="text-sm text-text-secondary mt-1">
-                  Active organizational accounts and assigned roles
-                </p>
-              </div>
-
-              {sectionLoading ? (
-                <LoadingSpinner message="Loading user directory..." />
-              ) : (
-                <div className="border border-border bg-surface rounded-sm overflow-x-auto shadow-xs">
-                  <table className="w-full text-left text-xs min-w-[700px]">
-                    <thead className="border-b border-border bg-bg uppercase tracking-wider text-text-secondary font-bold text-[11px]">
-                      <tr>
-                        <th className="p-3.5">User</th>
-                        <th className="p-3.5">Email</th>
-                        <th className="p-3.5">Role</th>
-                        <th className="p-3.5">Password Status</th>
-                        <th className="p-3.5">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border">
-                      {userList.map((u) => (
-                        <tr key={u.id} className="hover:bg-bg/50 transition-colors">
-                          <td className="p-3.5 font-semibold text-text-primary">
-                            {u.first_name} {u.last_name || ""}
-                          </td>
-                          <td className="p-3.5 font-mono text-text-secondary">{u.email}</td>
-                          <td className="p-3.5">
-                            <span className="px-2 py-0.5 border border-border bg-bg rounded-sm text-cherry dark:text-lime font-semibold text-[11px]">
-                              {u.role_name || `Role #${u.role_id}`}
-                            </span>
-                          </td>
-                          <td className="p-3.5">
-                            {u.must_reset_password ? (
-                              <span className="text-xs font-semibold text-cherry dark:text-vibrantRed">Temporary (Pending Reset)</span>
-                            ) : (
-                              <span className="text-xs text-text-secondary">Permanent</span>
-                            )}
-                          </td>
-                          <td className="p-3.5">
-                            <span className={`px-2 py-0.5 border border-border rounded-sm text-[10px] uppercase font-bold ${
-                              u.is_active ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30" : "bg-bg text-text-secondary"
-                            }`}>
-                              {u.is_active ? "Active" : "Inactive"}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          )}
+          {activeTab === "users" && <UserManagementView />}
 
           {/* Tab: RBAC */}
           {activeTab === "rbac" && (

@@ -1,4 +1,5 @@
 const IDENTITY_BASE_URL = "http://localhost:8001/api/v1";
+const NOTIFICATION_BASE_URL = "http://localhost:8002/api/v1";
 const INGESTION_BASE_URL = "http://localhost:8003/api/v1";
 const RAG_CHAT_BASE_URL = "http://localhost:8004/api/v1";
 
@@ -106,6 +107,26 @@ export const api = {
 
   // Users
   getUsers: () => request("/users"),
+  createUser: (payload) =>
+    request("/users", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+  deleteUser: (userId) =>
+    request(`/users/${userId}`, {
+      method: "DELETE",
+    }),
+
+  // Notifications (Port 8002)
+  sendTempPasswordEmail: (payload) =>
+    request(
+      "/notify/send-temp-password",
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+      },
+      NOTIFICATION_BASE_URL
+    ),
 
   // Document Ingestion (Port 8003)
   getIngestedDocuments: () =>
