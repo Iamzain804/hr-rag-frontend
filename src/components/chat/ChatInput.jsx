@@ -98,8 +98,8 @@ export function ChatInput({
   };
 
   return (
-    <div className="p-3 sm:p-4 bg-surface/90 backdrop-blur-md border-t border-border/70 shrink-0 shadow-lg">
-      <div className="max-w-4xl mx-auto space-y-2">
+    <div className="p-3 sm:p-4 bg-bg/80 backdrop-blur-md border-t border-border/40 shrink-0">
+      <div className="max-w-3xl mx-auto space-y-2">
         {/* Hidden File Input */}
         <input
           type="file"
@@ -111,7 +111,7 @@ export function ChatInput({
 
         {/* Attachment Pill Indicator */}
         {(attachmentFile || attachmentText) && (
-          <div className="p-2.5 px-3.5 border border-border/80 bg-bg rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs animate-fadeIn">
+          <div className="p-2.5 px-3.5 border border-border/80 bg-surface rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs animate-fadeIn shadow-2xs">
             <div className="flex items-center gap-2 overflow-hidden">
               {attachmentFile ? (
                 attachmentFile.type.startsWith("image/") ? (
@@ -126,18 +126,15 @@ export function ChatInput({
                 {attachmentFile ? attachmentFile.name : `Pasted text (${attachmentText.length} chars)`}
               </span>
               <span className="text-[10px] text-text-secondary hidden md:inline font-mono">
-                &bull; Temporary attachment
+                &bull; Temporary Context
               </span>
             </div>
 
             <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
-              <span className="text-[11px] text-text-secondary italic">
-                Included with this inquiry only
-              </span>
               <button
                 type="button"
                 onClick={removeAttachment}
-                className="p-1 rounded-lg text-text-secondary hover:text-cherry dark:hover:text-vibrantRed hover:bg-surface transition-colors"
+                className="p-1 rounded-lg text-text-secondary hover:text-cherry dark:hover:text-vibrantRed hover:bg-bg transition-colors"
                 title="Remove attachment"
               >
                 <X size={14} />
@@ -149,7 +146,7 @@ export function ChatInput({
         {/* Floating Input Container Box */}
         <form
           onSubmit={handleSend}
-          className="relative border border-border/80 bg-input-bg rounded-2xl focus-within:border-cherry dark:focus-within:border-lime focus-within:ring-2 focus-within:ring-cherry/20 dark:focus-within:ring-lime/20 transition-all p-3 shadow-sm space-y-2.5"
+          className="relative border border-border/80 bg-surface rounded-2xl focus-within:border-cherry dark:focus-within:border-lime focus-within:ring-2 focus-within:ring-cherry/10 dark:focus-within:ring-lime/10 transition-all p-3 shadow-sm space-y-2"
         >
           {/* Textarea */}
           <textarea
@@ -158,85 +155,53 @@ export function ChatInput({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask anything about leave policies, insurance, allowances, or office timings..."
+            placeholder="Ask about policies, leave days, medical benefits, office timings..."
             disabled={disabled}
-            className="w-full bg-transparent border-none outline-none resize-none px-2 py-1 text-sm text-text-primary placeholder:text-text-secondary max-h-48 leading-relaxed font-sans"
+            className="w-full bg-transparent border-none outline-none resize-none px-2 py-1 text-sm text-text-primary placeholder:text-text-secondary/70 max-h-48 leading-relaxed font-sans"
           />
 
-          {/* Bottom Toolbar: Mode Pills + Attachments + Send */}
-          <div className="flex items-center justify-between pt-1.5 border-t border-border/40 gap-2 flex-wrap">
-            {/* Left: Toggles & Attachment buttons */}
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {/* DeepThink / Rerank Mode Badge */}
-              <button
-                type="button"
-                onClick={() => setDeepThinkActive((p) => !p)}
-                className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 border transition-all ${
-                  deepThinkActive
-                    ? "border-cherry/40 dark:border-lime/40 bg-cherry/10 dark:bg-lime/10 text-cherry dark:text-lime shadow-2xs"
-                    : "border-border/60 bg-surface text-text-secondary opacity-60 hover:opacity-100"
-                }`}
-                title="Cross-Encoder Reranking & Precise Document Matching"
-              >
-                <Sparkles size={12} />
-                <span>Deep Reasoning</span>
-              </button>
-
-              {/* Document Search Mode Badge */}
-              <button
-                type="button"
-                onClick={() => setDocSearchActive((p) => !p)}
-                className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 border transition-all ${
-                  docSearchActive
-                    ? "border-cherry/40 dark:border-lime/40 bg-cherry/10 dark:bg-lime/10 text-cherry dark:text-lime shadow-2xs"
-                    : "border-border/60 bg-surface text-text-secondary opacity-60 hover:opacity-100"
-                }`}
-                title="Company Knowledge Base Search"
-              >
-                <Search size={12} />
-                <span>Company Docs</span>
-              </button>
-
-              {/* Attachment File Trigger */}
+          {/* Bottom Toolbar: Attachments on Left + Send on Right */}
+          <div className="flex items-center justify-between pt-1 border-t border-border/30 gap-2">
+            <div className="flex items-center gap-1 text-text-secondary">
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 title="Attach PDF, document, or image screenshot"
                 disabled={isStreaming || disabled}
-                className="p-1.5 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface transition-colors disabled:opacity-50 ml-1"
+                className="p-1.5 rounded-xl hover:text-text-primary hover:bg-bg transition-colors disabled:opacity-50 flex items-center gap-1.5 text-xs font-medium"
               >
-                <Paperclip size={17} />
+                <Paperclip size={15} />
+                <span className="hidden sm:inline">Attach</span>
               </button>
 
-              {/* Paste Text Snippet Trigger */}
               <button
                 type="button"
                 onClick={() => setShowPasteModal(true)}
                 title="Paste text snippet"
                 disabled={isStreaming || disabled}
-                className="p-1.5 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface transition-colors disabled:opacity-50 hidden sm:inline-flex"
+                className="p-1.5 rounded-xl hover:text-text-primary hover:bg-bg transition-colors disabled:opacity-50 hidden sm:flex items-center gap-1.5 text-xs font-medium"
               >
-                <Type size={17} />
+                <Type size={15} />
+                <span>Paste Context</span>
               </button>
             </div>
 
-            {/* Right: Send / Stop Action Button */}
             <div className="shrink-0">
               {isStreaming ? (
                 <button
                   type="button"
                   onClick={onStopGeneration}
                   title="Stop generating response"
-                  className="p-2.5 rounded-xl bg-btn-bg text-btn-text hover:bg-btn-hover transition-all shadow-sm flex items-center justify-center active:scale-95"
+                  className="p-2 rounded-xl bg-btn-bg text-btn-text hover:bg-btn-hover transition-all shadow-xs flex items-center justify-center active:scale-95"
                 >
-                  <Square size={14} className="fill-current" />
+                  <Square size={13} className="fill-current" />
                 </button>
               ) : (
                 <button
                   type="submit"
                   disabled={(!message.trim() && !attachmentFile && !attachmentText.trim()) || disabled}
                   title="Send question (Enter)"
-                  className="p-2.5 rounded-xl bg-btn-bg text-btn-text hover:bg-btn-hover disabled:opacity-30 disabled:hover:bg-btn-bg transition-all shadow-sm flex items-center justify-center active:scale-95"
+                  className="p-2.5 rounded-xl bg-btn-bg text-btn-text hover:bg-btn-hover disabled:opacity-30 disabled:hover:bg-btn-bg transition-all shadow-xs flex items-center justify-center active:scale-95"
                 >
                   <Send size={15} />
                 </button>
@@ -245,13 +210,13 @@ export function ChatInput({
           </div>
         </form>
 
-        {/* Footer Disclaimer */}
-        <div className="flex items-center justify-between text-[11px] text-text-secondary px-1 pt-0.5">
+        {/* Footer Hint */}
+        <div className="flex items-center justify-between text-[11px] text-text-secondary/70 px-1 pt-0.5">
           <span>
-            Press <kbd className="px-1.5 py-0.5 border border-border/80 bg-bg rounded-md font-mono text-[10px]">Enter</kbd> to send, <kbd className="px-1.5 py-0.5 border border-border/80 bg-bg rounded-md font-mono text-[10px]">Shift + Enter</kbd> for new line
+            Press <kbd className="px-1.5 py-0.5 border border-border/80 bg-surface rounded-md font-mono text-[10px]">Enter</kbd> to send, <kbd className="px-1.5 py-0.5 border border-border/80 bg-surface rounded-md font-mono text-[10px]">Shift + Enter</kbd> for new line
           </span>
-          <span className="flex items-center gap-1 text-[11px] opacity-80">
-            <HelpCircle size={11} /> Grounded in official company handbooks
+          <span className="flex items-center gap-1 opacity-80">
+            <HelpCircle size={11} /> Grounded in verified company handbooks
           </span>
         </div>
       </div>

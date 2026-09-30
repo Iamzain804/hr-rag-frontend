@@ -250,16 +250,15 @@ export function ChatView() {
         {/* Header Ribbon */}
         <header className="px-4 sm:px-6 py-3.5 border-b border-border/70 bg-surface/90 backdrop-blur-md flex items-center justify-between shrink-0 shadow-xs">
           <div className="flex items-center gap-3 overflow-hidden">
-            {isChatSidebarCollapsed && (
-              <button
-                type="button"
-                onClick={toggleChatSidebar}
-                className="p-1.5 border border-border/80 bg-bg hover:bg-surface-hover rounded-xl text-text-secondary hover:text-text-primary transition-colors mr-1"
-                title="Open Chat History"
-              >
-                <PanelLeft size={16} />
-              </button>
-            )}
+            {/* History Toggle Button */}
+            <button
+              type="button"
+              onClick={toggleChatSidebar}
+              className="p-2 border border-border/80 bg-bg hover:bg-surface-hover rounded-xl text-text-secondary hover:text-text-primary transition-colors mr-1"
+              title={isChatSidebarCollapsed ? "Open Chat History" : "Close Chat History"}
+            >
+              {isChatSidebarCollapsed ? <PanelLeft size={16} /> : <PanelLeftClose size={16} />}
+            </button>
 
             <div className="w-9 h-9 rounded-xl bg-surface border border-border/80 flex items-center justify-center font-bold shrink-0 shadow-2xs">
               <CrocodileLogo size={24} />
@@ -292,9 +291,9 @@ export function ChatView() {
             <button
               type="button"
               onClick={handleNewChat}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 border border-border/80 bg-bg hover:bg-surface text-xs font-semibold rounded-xl text-text-primary transition-colors shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-border/80 bg-bg hover:bg-surface text-xs font-semibold rounded-xl text-text-primary transition-colors shadow-2xs"
             >
-              <span>+ New Session</span>
+              <span>+ New Chat</span>
             </button>
           </div>
         </header>
@@ -385,21 +384,21 @@ export function ChatView() {
               </div>
             </div>
           ) : (
-            <div className="divide-y divide-border/20">
+            <div className="py-6 space-y-4">
               {messages.map((msg, index) => (
                 <ChatMessage key={msg.id || index} message={msg} />
               ))}
 
               {/* Thinking Indicator before first token */}
               {isThinking && (
-                <div className="py-4 px-4 sm:px-6 bg-surface border-b border-border animate-pulse">
-                  <div className="max-w-4xl mx-auto flex gap-4 items-center">
-                    <div className="w-8 h-8 rounded-sm bg-surface border border-border flex items-center justify-center shadow-xs">
-                      <CrocodileLogo size={22} />
+                <div className="flex justify-start w-full max-w-4xl mx-auto px-4 sm:px-6 py-2 animate-fadeIn">
+                  <div className="w-full bg-surface border border-border/80 rounded-2xl p-4 flex items-center gap-3 shadow-xs">
+                    <div className="w-7 h-7 rounded-lg bg-surface border border-border/80 flex items-center justify-center">
+                      <CrocodileLogo size={18} />
                     </div>
                     <div className="flex items-center gap-2 text-xs text-text-secondary">
-                      <div className="w-2 h-2 rounded-full bg-cherry dark:bg-lime animate-ping" />
-                      <span>Retrieving verified company documents & applying cross-encoder reranking...</span>
+                      <span className="w-2 h-2 rounded-full bg-cherry dark:bg-lime animate-pulse" />
+                      <span>Thinking & consulting company policies...</span>
                     </div>
                   </div>
                 </div>

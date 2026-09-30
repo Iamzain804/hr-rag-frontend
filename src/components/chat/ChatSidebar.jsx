@@ -49,36 +49,11 @@ export function ChatSidebar({
   );
 
   if (isChatSidebarCollapsed) {
-    return (
-      <div className="w-16 border-r border-border/70 bg-surface flex flex-col items-center py-4 justify-between shrink-0 h-full select-none transition-all duration-300 ease-in-out">
-        <div className="space-y-3 flex flex-col items-center">
-          <button
-            type="button"
-            onClick={toggleChatSidebar}
-            title="Expand Chat History"
-            className="p-2 text-text-secondary hover:text-text-primary hover:bg-surface-hover rounded-xl transition-colors"
-          >
-            <PanelLeft size={18} />
-          </button>
-          <button
-            type="button"
-            onClick={onNewChat}
-            title="Start New Chat"
-            className="p-2.5 bg-btn-bg text-btn-text hover:bg-btn-hover rounded-xl transition-all shadow-xs active:scale-95"
-          >
-            <MessageSquarePlus size={18} />
-          </button>
-        </div>
-
-        <div className="text-[10px] font-mono text-text-secondary">
-          {conversations.length}
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
-    <div className="w-72 border-r border-border/70 bg-surface flex flex-col justify-between shrink-0 h-full select-none transition-all duration-300 ease-in-out animate-fadeIn">
+    <div className="w-80 border-r border-border/70 bg-surface flex flex-col justify-between shrink-0 h-full select-none transition-all duration-300 ease-in-out z-20">
       {/* Top Header & New Chat Button */}
       <div className="p-3.5 border-b border-border/70 space-y-3">
         <div className="flex items-center justify-between">
