@@ -177,10 +177,10 @@ Standard probation period for all new hires is 90 days. During probation, either
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-text-primary flex items-center gap-2">
-            <Database className="text-cherry dark:text-lime" size={26} /> Document Ingestion & Knowledge Base
+            <FileText className="text-cherry dark:text-lime" size={26} /> Company Documents & Policies
           </h1>
           <p className="text-sm text-text-secondary mt-1">
-            Embed corporate policies and handbook documents into ChromaDB Vector Store (Port 8003)
+            Upload and manage corporate policies, employee handbooks, and HR documents
           </p>
         </div>
 
@@ -201,18 +201,13 @@ Standard probation period for all new hires is 90 days. During probation, either
         <div className="p-5 border border-emerald-500/50 bg-emerald-500/10 rounded-sm space-y-2 animate-scaleIn">
           <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider">
             <CheckCircle2 size={16} />
-            <span>Document Ingested Successfully</span>
+            <span>Document Uploaded Successfully</span>
           </div>
           <div className="space-y-1 text-xs text-text-primary">
             <div className="font-bold text-sm">{lastResult.source_document}</div>
             <div className="text-text-secondary text-[11px] font-mono">
-              Chunks Created: <span className="font-bold text-text-primary">{lastResult.chunks_created}</span> &bull; Status: {lastResult.status}
+              Sections Processed: <span className="font-bold text-text-primary">{lastResult.chunks_created}</span> &bull; Status: Ready
             </div>
-            {lastResult.content_hash && (
-              <div className="text-[10px] font-mono text-text-secondary truncate mt-1">
-                Hash: {lastResult.content_hash}
-              </div>
-            )}
           </div>
         </div>
       )}
@@ -436,12 +431,12 @@ Standard probation period for all new hires is 90 days. During probation, either
               {isSubmitting ? (
                 <>
                   <div className="w-4 h-4 border-2 border-btn-text border-t-transparent rounded-full animate-spin" />
-                  <span>Embedding into ChromaDB...</span>
+                  <span>Processing & Saving Document...</span>
                 </>
               ) : (
                 <>
-                  <Layers size={16} />
-                  <span>Ingest & Generate Embeddings</span>
+                  <UploadCloud size={16} />
+                  <span>Upload & Save Document</span>
                 </>
               )}
             </button>
@@ -454,7 +449,7 @@ Standard probation period for all new hires is 90 days. During probation, either
         <div className="flex items-center justify-between">
           <h2 className="text-base font-bold text-text-primary flex items-center gap-2">
             <FileText size={18} className="text-cherry dark:text-lime" />
-            Knowledge Base Registry ({documents.length})
+            Company Document Registry ({documents.length})
           </h2>
           <button
             type="button"
@@ -467,20 +462,20 @@ Standard probation period for all new hires is 90 days. During probation, either
         </div>
 
         {isLoadingDocs ? (
-          <LoadingSpinner message="Querying vector database registry..." />
+          <LoadingSpinner message="Loading company documents..." />
         ) : documents.length === 0 ? (
           <div className="p-8 border border-border bg-surface rounded-sm text-center text-xs text-text-secondary">
-            No documents ingested yet. Upload a document or click "Load Sample Policy" above to index your first policy.
+            No documents uploaded yet. Upload a document or click "Load Sample Policy" above to add your first policy.
           </div>
         ) : (
           <div className="border border-border bg-surface rounded-sm overflow-hidden shadow-xs">
             <table className="w-full text-left text-xs">
               <thead className="border-b border-border bg-bg uppercase tracking-wider text-text-secondary font-bold">
                 <tr>
-                  <th className="p-3">Document Source</th>
-                  <th className="p-3">Scope / Visibility</th>
-                  <th className="p-3">Chunks</th>
-                  <th className="p-3">Content Hash</th>
+                  <th className="p-3">Document Title</th>
+                  <th className="p-3">Access Scope</th>
+                  <th className="p-3">Sections</th>
+                  <th className="p-3">Document ID</th>
                   <th className="p-3">Status</th>
                 </tr>
               </thead>
@@ -507,14 +502,14 @@ Standard probation period for all new hires is 90 days. During probation, either
                       )}
                     </td>
                     <td className="p-3 font-mono font-semibold">
-                      {doc.chunk_count || 1} chunks
+                      {doc.chunk_count || 1} sections
                     </td>
                     <td className="p-3 font-mono text-[10px] text-text-secondary truncate max-w-xs">
-                      {doc.content_hash ? doc.content_hash.slice(0, 16) + "..." : "indexed"}
+                      {doc.content_hash ? doc.content_hash.slice(0, 16) + "..." : "active"}
                     </td>
                     <td className="p-3">
                       <span className="px-2 py-0.5 border border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-sm text-[10px] uppercase font-bold">
-                        Indexed in Vector DB
+                        Active & Available
                       </span>
                     </td>
                   </tr>

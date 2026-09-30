@@ -49,7 +49,7 @@ export function Sidebar({ activeTab, setActiveTab }) {
     },
     {
       id: "ingestion",
-      label: "Document Ingestion",
+      label: "Documents & Policies",
       icon: FileText,
       permission: "upload_documents",
       visible: hasPermission("upload_documents"),
